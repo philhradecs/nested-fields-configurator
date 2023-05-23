@@ -14,7 +14,7 @@ export const EditFormFieldName = ({ index }: EditFormFieldNameProps) => {
   const name = `formFields.${index}.field_name` as const;
   const label = useWatch({ name });
   const { register, handleSubmit } = useForm({
-    defaultValues: { name: label },
+    defaultValues: { name: label }
   });
 
   return (
@@ -22,14 +22,14 @@ export const EditFormFieldName = ({ index }: EditFormFieldNameProps) => {
       mih={36}
       align="center"
       display="inline-flex"
-      onKeyDown={(event) => event.stopPropagation()}
+      onKeyDown={event => event.stopPropagation()}
     >
       {editMode ? (
         <TextInput
           autoFocus
           placeholder="Required"
           {...register("name", { required: true })}
-          onClick={(event) => event.stopPropagation()}
+          onClick={event => event.stopPropagation()}
         />
       ) : (
         <Text weight="bold" size="lg">
@@ -39,9 +39,9 @@ export const EditFormFieldName = ({ index }: EditFormFieldNameProps) => {
       {editMode ? (
         <Button
           size="sm"
-          onClick={(event) => {
+          onClick={event => {
             event.stopPropagation();
-            handleSubmit((data) => {
+            handleSubmit(data => {
               setEditMode(false);
               setValue(name, data.name);
             })();
@@ -53,7 +53,7 @@ export const EditFormFieldName = ({ index }: EditFormFieldNameProps) => {
         <ActionIcon
           size="md"
           color="indigo.6"
-          onClick={(event) => {
+          onClick={event => {
             event.stopPropagation();
             setEditMode(true);
           }}

@@ -6,7 +6,7 @@ type UseFieldsSelectOptionsProps = {
   watch?: boolean;
 };
 export const useFieldsSelectOptions = ({
-  watch,
+  watch
 }: UseFieldsSelectOptionsProps) => {
   const { getValues, control } = useFormContext<FormFieldConfiguratorData>();
 
@@ -14,17 +14,17 @@ export const useFieldsSelectOptions = ({
 
   const watchedFields = useWatch({
     control,
-    name: 'formFields',
-    disabled: !watch,
-  })
+    name: "formFields",
+    disabled: !watch
+  });
 
   const effectiveFields = watch ? watchedFields : existingFields;
 
   const refresh = () => setExistingFields(getValues("formFields"));
 
-  const selectOptions = effectiveFields.map((field) => ({
+  const selectOptions = effectiveFields.map(field => ({
     label: field.field_name,
-    value: field.field_key,
+    value: field.field_key
   }));
   return { selectOptions, refresh };
 };

@@ -7,14 +7,14 @@ function App() {
       withGlobalStyles
       withNormalizeCSS
       theme={{
-        globalStyles: (theme) => ({
-          html: { scrollbarGutter: "stable both-edges" },
+        globalStyles: theme => ({
+          html: { scrollbarGutter: "stable both-edges" }
         }),
         colorScheme: "dark",
         components: {
           Button: { defaultProps: { radius: "xs", color: "indigo" } },
-          Paper: { defaultProps: { radius: "sm" } },
-        },
+          Paper: { defaultProps: { radius: "sm" } }
+        }
       }}
     >
       <FormFieldsConfigurator />

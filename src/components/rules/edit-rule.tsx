@@ -16,16 +16,16 @@ export const EditRule = ({ rule, prefix }: RuleFieldSelectProps) => {
   const watchFormFields = true;
 
   const { selectOptions, refresh } = useFieldsSelectOptions({
-    watch: watchFormFields,
+    watch: watchFormFields
   });
 
   const ruleValueRegister = register("rule_value");
 
-  const submitRuleKey = handleSubmit((data) =>
+  const submitRuleKey = handleSubmit(data =>
     setValue(`${prefix}.rule_field_key`, data.rule_field_key)
   );
 
-  const submitRuleValue = handleSubmit((data) =>
+  const submitRuleValue = handleSubmit(data =>
     setValue(`${prefix}.rule_field_value`, data.rule_value)
   );
 
@@ -45,7 +45,9 @@ export const EditRule = ({ rule, prefix }: RuleFieldSelectProps) => {
                 >
                   <IconRefresh size={16} />
                 </ActionIcon>
-              ) : undefined
+              ) : (
+                undefined
+              )
             }
             data={selectOptions}
             sx={{ flex: 1 }}
@@ -60,7 +62,7 @@ export const EditRule = ({ rule, prefix }: RuleFieldSelectProps) => {
       />
       <TextInput
         {...ruleValueRegister}
-        onBlur={(event) => {
+        onBlur={event => {
           ruleValueRegister.onBlur(event);
           submitRuleValue();
         }}

@@ -13,7 +13,7 @@ export const EditOption = ({
   option,
   index,
   remove,
-  prefix,
+  prefix
 }: EditOptionProps) => {
   const { setValue } = useFormContext();
   const { register, handleSubmit } = useForm({ defaultValues: option });
@@ -23,7 +23,7 @@ export const EditOption = ({
       <TextInput
         {...register("option_label")}
         defaultValue={option.option_label}
-        onBlur={handleSubmit((data) =>
+        onBlur={handleSubmit(data =>
           setValue(`${prefix}.option_label`, data.option_label)
         )}
         sx={{ flex: 1 }}
@@ -32,7 +32,7 @@ export const EditOption = ({
       <TextInput
         {...register("option_value")}
         defaultValue={option.option_value}
-        onBlur={handleSubmit((data) =>
+        onBlur={handleSubmit(data =>
           setValue(`${prefix}.option_value`, data.option_label)
         )}
         sx={{ flex: 1 }}

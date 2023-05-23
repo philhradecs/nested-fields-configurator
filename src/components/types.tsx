@@ -1,4 +1,3 @@
-
 import { Button, Container, Grid, Title } from "@mantine/core";
 
 import testFormFields from "../data/test-data.json";
@@ -30,4 +29,4 @@ export type Field = {
   rules: FieldRule[];
 };
 
-export type FormFieldConfiguratorData = { formFields: Field[]; };
+export type FormFieldConfiguratorData = { formFields: Field[] };

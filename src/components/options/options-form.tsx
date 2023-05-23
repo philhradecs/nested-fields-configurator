@@ -12,14 +12,12 @@ export const EditOptionsForm = ({ index }: FieldOptionFormProps) => {
   const { control } = useFormContext<FormFieldConfiguratorData>();
   const { fields, remove, append } = useFieldArray({
     name: `formFields.${index}.options`,
-    control,
+    control
   });
 
   return (
     <Stack spacing="lg">
-      <Text weight="bold">
-        Options
-      </Text>
+      <Text weight="bold">Options</Text>
       <Stack>
         {fields.map((option, index) => (
           <EditOption

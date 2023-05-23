@@ -1,9 +1,6 @@
 import { ActionIcon, Button, Group, Paper, Stack, Text } from "@mantine/core";
 import { FieldRule, FormFieldConfiguratorData } from "../types";
-import {
-  useFieldArray,
-  useFormContext,
-} from "react-hook-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import { EditRuleChildren } from "./edit-rule-children";
 
 import { IconPlus, IconTrash } from "@tabler/icons-react";
@@ -15,22 +12,17 @@ type FieldOptionFormProps = {
 
 export const RulesForm = ({ index }: FieldOptionFormProps) => {
   const { control } = useFormContext<FormFieldConfiguratorData>();
-  const {
-    fields: rules,
-    remove,
-    append,
-  } = useFieldArray({
+  const { fields: rules, remove, append } = useFieldArray({
     name: `formFields.${index}.rules`,
-    control,
+    control
   });
 
-  const addRule = () => append({ rule_value: "", rule_field_key: "", children: [] })
+  const addRule = () =>
+    append({ rule_value: "", rule_field_key: "", children: [] });
 
   return (
     <Stack spacing="lg">
-      <Text weight="bold">
-        Rules
-      </Text>
+      <Text weight="bold">Rules</Text>
       <Stack spacing={32}>
         {rules.map((rule, ruleIdx) => (
           <EditNestedRule
@@ -46,7 +38,7 @@ export const RulesForm = ({ index }: FieldOptionFormProps) => {
       <Button
         ml="auto"
         size="sm"
-        leftIcon={<IconPlus size={16}/> }
+        leftIcon={<IconPlus size={16} />}
         onClick={addRule}
       >
         Add Rule
@@ -62,7 +54,12 @@ type EditRuleGroupProps = {
   removeRule: () => void;
 };
 
-const EditNestedRule = ({ rule, prefix, index, removeRule }: EditRuleGroupProps) => {
+const EditNestedRule = ({
+  rule,
+  prefix,
+  index,
+  removeRule
+}: EditRuleGroupProps) => {
   return (
     <Group>
       <Text color="dimmed">{index + 1}</Text>

@@ -1,4 +1,4 @@
-import { Button, Container, Divider, Grid, Text, Title } from "@mantine/core";
+import { Button, Container, Divider, Grid, Title } from "@mantine/core";
 
 import testFormFields from "../data/test-data.json";
 import { AddFormField } from "./form-field/add-field";
@@ -9,17 +9,17 @@ import { KeyboardEvent } from "react";
 
 export const FormFieldsConfigurator = () => {
   const formMethods = useForm<FormFieldConfiguratorData>({
-    defaultValues: { formFields: testFormFields },
+    defaultValues: { formFields: testFormFields }
   });
   const { handleSubmit, control } = formMethods;
 
   const { fields, append } = useFieldArray({
     name: "formFields",
-    control,
+    control
   });
 
   const onSubmit = (data: FormFieldConfiguratorData) => {
-    console.log(data)
+    console.log(data);
     window.alert(JSON.stringify(data, null, 2));
   };
 

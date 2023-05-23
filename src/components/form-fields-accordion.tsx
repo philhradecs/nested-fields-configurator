@@ -29,5 +29,3 @@ export const FormFieldsAccordion = ({ formFields }: BuilderAccordionProps) => {
     </Box>
   );
 };
-
-

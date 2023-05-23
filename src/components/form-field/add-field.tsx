@@ -9,11 +9,11 @@ type AddFormFieldProps = {
 export const AddFormField = ({ append }: AddFormFieldProps) => {
   const { getValues } = useFormContext<FormFieldConfiguratorData>();
   const { handleSubmit, register, reset } = useForm({
-    defaultValues: { formFieldName: "" },
+    defaultValues: { formFieldName: "" }
   });
 
   const appendDefaultValues = ({
-    formFieldName,
+    formFieldName
   }: {
     formFieldName: string;
   }) => {
@@ -22,7 +22,7 @@ export const AddFormField = ({ append }: AddFormFieldProps) => {
       field_name: formFieldName,
       field_key: `field_${values.formFields.length + 1}`,
       options: [{ option_label: "", option_value: "" }],
-      rules: [{ rule_field_key: "", rule_value: "", children: [] }],
+      rules: [{ rule_field_key: "", rule_value: "", children: [] }]
     });
     reset({ formFieldName: "" });
   };
@@ -33,7 +33,12 @@ export const AddFormField = ({ append }: AddFormFieldProps) => {
         placeholder="Enter Field Name"
         {...register("formFieldName")}
       />
-      <Button mt="sm" fullWidth onClick={handleSubmit(appendDefaultValues)} leftIcon={<IconPlus size={16}/>}>
+      <Button
+        mt="sm"
+        fullWidth
+        onClick={handleSubmit(appendDefaultValues)}
+        leftIcon={<IconPlus size={16} />}
+      >
         Add Field
       </Button>
     </Box>

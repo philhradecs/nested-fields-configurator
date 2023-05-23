@@ -1,4 +1,4 @@
-import { Accordion, Box } from "@mantine/core";
+import { Accordion } from "@mantine/core";
 import { FieldsForm } from "./fields-form";
 
 import { EditField } from "./edit-field";
@@ -6,7 +6,7 @@ import { Field } from "../types";
 import { UseFieldArrayRemove } from "react-hook-form";
 
 type FieldsAccordionProps = {
-  formFields: Field[];
+  formFields: (Field & { id: string })[];
   remove: UseFieldArrayRemove;
 };
 
@@ -15,20 +15,20 @@ export const FieldsAccordion = ({
   remove
 }: FieldsAccordionProps) => {
   return (
-      <Accordion variant="separated">
-        {formFields.map((field, index) => (
-          <Accordion.Item value={field.field_key} key={field.field_key}>
-            <Accordion.Control>
-              <EditField
-                path={`formFields.${index}.field_name`}
-                remove={() => remove(index)}
-              />
-            </Accordion.Control>
-            <Accordion.Panel>
-              <FieldsForm index={index} />
-            </Accordion.Panel>
-          </Accordion.Item>
-        ))}
-      </Accordion>
+    <Accordion variant="separated">
+      {formFields.map((field, index) => (
+        <Accordion.Item value={field.field_key} key={field.id}>
+          <Accordion.Control>
+            <EditField
+              path={`formFields.${index}.field_name`}
+              remove={() => remove(index)}
+            />
+          </Accordion.Control>
+          <Accordion.Panel>
+            <FieldsForm index={index} />
+          </Accordion.Panel>
+        </Accordion.Item>
+      ))}
+    </Accordion>
   );
 };

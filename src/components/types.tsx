@@ -22,4 +22,4 @@ export type Field = {
   rules: FieldRule[];
 };
 
-export type FieldConfiguratorData = { formFields: Field[] };
+export type RulesBuilderFormData = { formFields: Field[] };

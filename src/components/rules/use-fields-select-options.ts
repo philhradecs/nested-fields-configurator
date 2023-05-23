@@ -1,5 +1,5 @@
 import { useFormContext, useWatch } from "react-hook-form";
-import { Field, FieldConfiguratorData } from "../types";
+import { Field, RulesBuilderFormData } from "../types";
 import { useCallback, useEffect, useState } from "react";
 
 type UseFieldsSelectOptionsProps = {
@@ -8,7 +8,7 @@ type UseFieldsSelectOptionsProps = {
 export const useFieldsSelectOptions = ({
   selectedFieldName
 }: UseFieldsSelectOptionsProps) => {
-  const { getValues } = useFormContext<FieldConfiguratorData>();
+  const { getValues } = useFormContext<RulesBuilderFormData>();
 
   const selectedField = useWatch({ name: selectedFieldName });
 
@@ -36,10 +36,10 @@ export const useFieldsSelectOptions = ({
     },
     []
   );
-  const [fieldSelectOptions, setFieldSelectOptions] = useState(
+  const [fieldSelectOptions, setFieldSelectOptions] = useState(() =>
     getFieldSelectOptions(getValues("formFields") || [])
   );
-  const [selectedFieldOptions, setSelectedFieldOptions] = useState(
+  const [selectedFieldOptions, setSelectedFieldOptions] = useState(() =>
     getFieldOptions(selectedField)(getValues("formFields") || [])
   );
 

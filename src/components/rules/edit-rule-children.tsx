@@ -8,7 +8,7 @@ import {
   useMantineTheme
 } from "@mantine/core";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { FieldConfiguratorData } from "../types";
+import { RulesBuilderFormData } from "../types";
 import { EditRule } from "./edit-rule";
 import { IconPlus } from "@tabler/icons-react";
 import { RemoveButton } from "../remove-button";
@@ -19,7 +19,7 @@ type EditRuleChildrenProps = {
 };
 
 export const EditRuleChildren = ({ path }: EditRuleChildrenProps) => {
-  const { control } = useFormContext<FieldConfiguratorData>();
+  const { control } = useFormContext<RulesBuilderFormData>();
 
   const { fields, append, remove } = useFieldArray({
     name: `${path}.children` as "formFields.0.rules",

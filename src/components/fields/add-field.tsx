@@ -1,13 +1,13 @@
 import { Button, Group, TextInput } from "@mantine/core";
 import { UseFieldArrayAppend, useForm, useFormContext } from "react-hook-form";
-import { FieldConfiguratorData } from "../types";
+import { RulesBuilderFormData } from "../types";
 import { IconPlus } from "@tabler/icons-react";
 
 type AddFormFieldProps = {
-  append: UseFieldArrayAppend<FieldConfiguratorData, "formFields">;
+  append: UseFieldArrayAppend<RulesBuilderFormData, "formFields">;
 };
 export const AddFormField = ({ append }: AddFormFieldProps) => {
-  const { getValues } = useFormContext<FieldConfiguratorData>();
+  const { getValues } = useFormContext<RulesBuilderFormData>();
   const { handleSubmit, register, reset } = useForm({
     defaultValues: { formFieldName: "" }
   });

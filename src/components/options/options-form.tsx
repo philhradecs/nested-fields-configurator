@@ -1,5 +1,5 @@
 import { Button, Stack, Text } from "@mantine/core";
-import { FieldConfiguratorData } from "../types";
+import { RulesBuilderFormData } from "../types";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { EditOption } from "./edit-option";
 import { IconPlus } from "@tabler/icons-react";
@@ -10,7 +10,7 @@ type FieldOptionFormProps = {
 
 export const EditOptionsForm = ({ index }: FieldOptionFormProps) => {
   const path = `formFields.${index}.options` as const;
-  const { control } = useFormContext<FieldConfiguratorData>();
+  const { control } = useFormContext<RulesBuilderFormData>();
   const { fields, remove, append } = useFieldArray({
     name: path,
     control
@@ -24,7 +24,7 @@ export const EditOptionsForm = ({ index }: FieldOptionFormProps) => {
           <EditOption
             option={option}
             index={optionIdx}
-            remove={() => remove(index)}
+            remove={() => remove(optionIdx)}
             path={`${path}.${optionIdx}`}
             key={option.id}
           />

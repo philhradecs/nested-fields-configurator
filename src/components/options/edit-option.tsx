@@ -2,6 +2,7 @@ import { Group, Text, TextInput } from "@mantine/core";
 import { FieldOption } from "../types";
 import { useForm, useFormContext } from "react-hook-form";
 import { RemoveButton } from "../remove-button";
+import { useTransition } from "react";
 
 type EditOptionProps = {
   option: FieldOption;
@@ -13,10 +14,14 @@ export const EditOption = ({
   option,
   index,
   remove,
-  path
+  path,
 }: EditOptionProps) => {
   const { setValue } = useFormContext();
-  const { register, handleSubmit } = useForm({ defaultValues: option });
+  const { register, handleSubmit } = useForm({
+    defaultValues: option,
+  });
+
+  const startTransition = useTransition()[1];
 
   const registerOptionLabel = register("option_label");
   const registerOptionValue = register("option_value");
@@ -25,13 +30,15 @@ export const EditOption = ({
     <Group>
       <Text color="dimmed">{index + 1}</Text>
       <TextInput
+        autoFocus
         placeholder="Label"
         {...registerOptionLabel}
-        onBlur={event => {
+        onBlur={(event) => {
           registerOptionLabel.onBlur(event);
-          handleSubmit(data => {
-            console.log(`${path}.option_label`);
-            return setValue(`${path}.option_label`, data.option_label);
+          handleSubmit((data) => {
+            startTransition(() =>
+              setValue(`${path}.option_label`, data.option_label)
+            );
           })();
         }}
         sx={{ flex: 1 }}
@@ -39,10 +46,12 @@ export const EditOption = ({
       <TextInput
         placeholder="Value"
         {...registerOptionValue}
-        onBlur={event => {
+        onBlur={(event) => {
           registerOptionValue.onBlur(event);
-          handleSubmit(data =>
-            setValue(`${path}.option_value`, data.option_label)
+          handleSubmit((data) =>
+            startTransition(() =>
+              setValue(`${path}.option_value`, data.option_label)
+            )
           )();
         }}
         sx={{ flex: 1 }}

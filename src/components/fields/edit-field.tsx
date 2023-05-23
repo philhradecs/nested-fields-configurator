@@ -2,17 +2,17 @@ import { ActionIcon, Button, Group, Text, TextInput } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import { useState } from "react";
 import { useWatch, useForm, useFormContext, FieldPath } from "react-hook-form";
-import { FieldConfiguratorData } from "../types";
+import { RulesBuilderFormData } from "../types";
 import { RemoveButton } from "../remove-button";
 
 type EditFieldProps = {
-  path: FieldPath<FieldConfiguratorData>;
+  path: FieldPath<RulesBuilderFormData>;
   remove: () => void;
 };
 
 export const EditField = ({ path, remove }: EditFieldProps) => {
   const [editMode, setEditMode] = useState(false);
-  const { setValue } = useFormContext<FieldConfiguratorData>();
+  const { setValue } = useFormContext<RulesBuilderFormData>();
   const label = useWatch({ name: path });
   const { register, handleSubmit } = useForm({
     defaultValues: { name: label }
@@ -34,6 +34,7 @@ export const EditField = ({ path, remove }: EditFieldProps) => {
       )}
       {editMode ? (
         <Button
+          component="div"
           size="xs"
           onClick={event => {
             event.stopPropagation();
@@ -48,6 +49,7 @@ export const EditField = ({ path, remove }: EditFieldProps) => {
       ) : (
         <Group spacing="xs">
           <ActionIcon
+            component="div"
             size="md"
             color="indigo.6"
             onClick={event => {
@@ -58,6 +60,7 @@ export const EditField = ({ path, remove }: EditFieldProps) => {
             <IconPencil size={16} />
           </ActionIcon>
           <RemoveButton
+            component="div"
             onClick={event => {
               event.stopPropagation();
               remove();

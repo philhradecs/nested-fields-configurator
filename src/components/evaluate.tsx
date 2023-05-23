@@ -10,13 +10,13 @@ import {
   Title,
   useMantineTheme
 } from "@mantine/core";
-import { Field, FieldConfiguratorData } from "../types";
+import { Field, RulesBuilderFormData } from "./types";
 import { useFormContext } from "react-hook-form";
 import { useMemo, useState } from "react";
-import { evaluateRules } from "../../util/evaluate-rules";
+import { evaluateRules } from "../util/evaluate-rules";
 
-export const EvaluateRules = () => {
-  const { watch } = useFormContext<FieldConfiguratorData>();
+export const Evaluate = () => {
+  const { watch } = useFormContext<RulesBuilderFormData>();
   const evaluationFields = watch("formFields");
 
   const [selectedField, setSelectedField] = useState<string | null>(
@@ -110,6 +110,7 @@ export const EvaluateRules = () => {
             <Group>
               {results.map((match, idx) => (
                 <Badge
+                  key={idx}
                   variant="filled"
                   radius="sm"
                   size="xl"

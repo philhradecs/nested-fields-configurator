@@ -1,54 +1,63 @@
-import { Group, Select, ActionIcon } from "@mantine/core";
+import { Group, Select, ActionIcon, Loader } from "@mantine/core";
 import { IconReload } from "@tabler/icons-react";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { useFieldsSelectOptions } from "./use-fields-select-options";
+import { useTransition } from "react";
 
 type RuleFieldSelectProps = {
   path: string;
 };
 
 export const EditRule = ({ path }: RuleFieldSelectProps) => {
-  const { control } = useFormContext();
-
   const {
     fieldSelectOptions,
     selectedFieldOptions,
     refresh
   } = useFieldsSelectOptions({ selectedFieldName: `${path}.rule_field_key` });
 
+  const [isPending, startTransition] = useTransition();
+
   return (
     <Group>
       <Controller
         name={`${path}.rule_field_key`}
-        control={control}
         render={({ field }) => (
           <Select
             placeholder="Select Field"
             rightSection={
-              <ActionIcon variant="subtle" onClick={refresh} color="gray">
-                <IconReload size={14} />
-              </ActionIcon>
+              isPending ? (
+                <Loader size="xs" />
+              ) : (
+                <ActionIcon variant="subtle" onClick={refresh} color="gray">
+                  <IconReload size={14} />
+                </ActionIcon>
+              )
             }
             data={fieldSelectOptions}
             sx={{ flex: 1 }}
             {...field}
+            onChange={value => startTransition(() => field.onChange(value))}
           />
         )}
       />
       <Controller
         name={`${path}.rule_value`}
-        control={control}
         render={({ field }) => (
           <Select
             placeholder="Select Option"
             rightSection={
-              <ActionIcon variant="subtle" onClick={refresh} color="gray">
-                <IconReload size={14} />
-              </ActionIcon>
+              isPending ? (
+                <Loader size="xs" />
+              ) : (
+                <ActionIcon variant="subtle" onClick={refresh} color="gray">
+                  <IconReload size={14} />
+                </ActionIcon>
+              )
             }
             data={selectedFieldOptions}
             sx={{ flex: 1 }}
             {...field}
+            onChange={value => startTransition(() => field.onChange(value))}
           />
         )}
       />

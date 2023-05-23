@@ -1,25 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { MantineProvider } from "@mantine/core";
+import { FormFieldsConfigurator } from "./components/form-fields-configurator";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      theme={{
+        globalStyles: (theme) => ({
+          html: { scrollbarGutter: "stable both-edges" },
+        }),
+        colorScheme: "dark",
+        components: {
+          Button: { defaultProps: { radius: "xs", color: "indigo" } },
+          Paper: { defaultProps: { radius: "sm" } },
+        },
+      }}
+    >
+      <FormFieldsConfigurator />
+    </MantineProvider>
   );
 }
 

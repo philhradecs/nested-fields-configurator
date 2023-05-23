@@ -1,13 +1,13 @@
-import { Box, Button, TextInput } from "@mantine/core";
+import { Button, Group, TextInput } from "@mantine/core";
 import { UseFieldArrayAppend, useForm, useFormContext } from "react-hook-form";
-import { FormFieldConfiguratorData } from "../types";
+import { FieldConfiguratorData } from "../types";
 import { IconPlus } from "@tabler/icons-react";
 
 type AddFormFieldProps = {
-  append: UseFieldArrayAppend<FormFieldConfiguratorData, "formFields">;
+  append: UseFieldArrayAppend<FieldConfiguratorData, "formFields">;
 };
 export const AddFormField = ({ append }: AddFormFieldProps) => {
-  const { getValues } = useFormContext<FormFieldConfiguratorData>();
+  const { getValues } = useFormContext<FieldConfiguratorData>();
   const { handleSubmit, register, reset } = useForm({
     defaultValues: { formFieldName: "" }
   });
@@ -28,19 +28,19 @@ export const AddFormField = ({ append }: AddFormFieldProps) => {
   };
 
   return (
-    <Box>
+    <Group>
       <TextInput
+        size="lg"
         placeholder="Enter Field Name"
         {...register("formFieldName")}
       />
       <Button
-        mt="sm"
-        fullWidth
+        size="lg"
         onClick={handleSubmit(appendDefaultValues)}
         leftIcon={<IconPlus size={16} />}
       >
-        Add Field
+        Add
       </Button>
-    </Box>
+    </Group>
   );
 };

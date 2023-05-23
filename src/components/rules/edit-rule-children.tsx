@@ -5,10 +5,10 @@ import {
   Paper,
   Stack,
   Text,
-  useMantineTheme,
+  useMantineTheme
 } from "@mantine/core";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { FormFieldConfiguratorData } from "../types";
+import { FieldConfiguratorData } from "../types";
 import { EditRule } from "./edit-rule";
 import { IconPlus } from "@tabler/icons-react";
 import { RemoveButton } from "../remove-button";
@@ -19,11 +19,11 @@ type EditRuleChildrenProps = {
 };
 
 export const EditRuleChildren = ({ path }: EditRuleChildrenProps) => {
-  const { control } = useFormContext<FormFieldConfiguratorData>();
+  const { control } = useFormContext<FieldConfiguratorData>();
 
   const { fields, append, remove } = useFieldArray({
     name: `${path}.children` as "formFields.0.rules",
-    control,
+    control
   });
 
   const theme = useMantineTheme();

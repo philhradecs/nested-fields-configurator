@@ -1,22 +1,22 @@
-import {  useFormContext, useWatch } from "react-hook-form";
-import { Field, FormFieldConfiguratorData } from "../types";
+import { useFormContext, useWatch } from "react-hook-form";
+import { Field, FieldConfiguratorData } from "../types";
 import { useCallback, useEffect, useState } from "react";
 
 type UseFieldsSelectOptionsProps = {
   selectedFieldName: string;
 };
 export const useFieldsSelectOptions = ({
-  selectedFieldName,
+  selectedFieldName
 }: UseFieldsSelectOptionsProps) => {
-  const { getValues } = useFormContext<FormFieldConfiguratorData>();
+  const { getValues } = useFormContext<FieldConfiguratorData>();
 
   const selectedField = useWatch({ name: selectedFieldName });
 
   const getFieldSelectOptions = useCallback(
     (fields: Field[]) =>
-      fields.map((field) => ({
+      fields.map(field => ({
         label: field.field_name,
-        value: field.field_key,
+        value: field.field_key
       })),
     []
   );
@@ -25,13 +25,13 @@ export const useFieldsSelectOptions = ({
     (fieldKey: string | undefined) => (fields: Field[]) => {
       if (!fieldKey) return [];
 
-      const field = fields.find((field) => field.field_key === fieldKey);
+      const field = fields.find(field => field.field_key === fieldKey);
 
       if (!field) return [];
 
-      return field.options.map((option) => ({
+      return field.options.map(option => ({
         label: option.option_label,
-        value: option.option_value,
+        value: option.option_value
       }));
     },
     []

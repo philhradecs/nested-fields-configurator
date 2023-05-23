@@ -1,24 +1,20 @@
 import { Accordion, Box } from "@mantine/core";
-import { FieldsForm } from "./field/fields-form";
+import { FieldsForm } from "./fields-form";
 
-import { atom } from "jotai";
-import { EditField } from "./field/edit-field";
-import { Field } from "./types";
+import { EditField } from "./edit-field";
+import { Field } from "../types";
 import { UseFieldArrayRemove } from "react-hook-form";
 
-export const formFieldDataAtom = atom<Field[]>([]);
-
-type BuilderAccordionProps = {
+type FieldsAccordionProps = {
   formFields: Field[];
   remove: UseFieldArrayRemove;
 };
 
-export const FormFieldsAccordion = ({
+export const FieldsAccordion = ({
   formFields,
-  remove,
-}: BuilderAccordionProps) => {
+  remove
+}: FieldsAccordionProps) => {
   return (
-    <Box>
       <Accordion variant="separated">
         {formFields.map((field, index) => (
           <Accordion.Item value={field.field_key} key={field.field_key}>
@@ -34,6 +30,5 @@ export const FormFieldsAccordion = ({
           </Accordion.Item>
         ))}
       </Accordion>
-    </Box>
   );
 };

@@ -1,5 +1,5 @@
 import { Button, Group, Paper, Stack, Text } from "@mantine/core";
-import { FormFieldConfiguratorData } from "../types";
+import { FieldConfiguratorData } from "../types";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { EditRuleChildren } from "./edit-rule-children";
 
@@ -13,14 +13,10 @@ type FieldOptionFormProps = {
 
 export const RulesForm = ({ index }: FieldOptionFormProps) => {
   const path = `formFields.${index}.rules` as const;
-  const { control } = useFormContext<FormFieldConfiguratorData>();
-  const {
-    fields: rules,
-    remove,
-    append,
-  } = useFieldArray({
+  const { control } = useFormContext<FieldConfiguratorData>();
+  const { fields: rules, remove, append } = useFieldArray({
     name: path,
-    control,
+    control
   });
 
   const addRule = () =>

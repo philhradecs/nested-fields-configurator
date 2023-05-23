@@ -1,17 +1,20 @@
 import { Group, Select, ActionIcon } from "@mantine/core";
 import { IconReload } from "@tabler/icons-react";
-import { Controller,  useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { useFieldsSelectOptions } from "./use-fields-select-options";
 
 type RuleFieldSelectProps = {
-  path: string
+  path: string;
 };
 
 export const EditRule = ({ path }: RuleFieldSelectProps) => {
   const { control } = useFormContext();
 
-  const { fieldSelectOptions, selectedFieldOptions, refresh } =
-    useFieldsSelectOptions({ selectedFieldName: `${path}.rule_field_key` });
+  const {
+    fieldSelectOptions,
+    selectedFieldOptions,
+    refresh
+  } = useFieldsSelectOptions({ selectedFieldName: `${path}.rule_field_key` });
 
   return (
     <Group>
@@ -22,7 +25,7 @@ export const EditRule = ({ path }: RuleFieldSelectProps) => {
           <Select
             placeholder="Select Field"
             rightSection={
-              <ActionIcon variant="subtle" onClick={refresh} color="teal">
+              <ActionIcon variant="subtle" onClick={refresh} color="gray">
                 <IconReload size={14} />
               </ActionIcon>
             }
@@ -39,7 +42,7 @@ export const EditRule = ({ path }: RuleFieldSelectProps) => {
           <Select
             placeholder="Select Option"
             rightSection={
-              <ActionIcon variant="subtle" onClick={refresh} color="teal">
+              <ActionIcon variant="subtle" onClick={refresh} color="gray">
                 <IconReload size={14} />
               </ActionIcon>
             }

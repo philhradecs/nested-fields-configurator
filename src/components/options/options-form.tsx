@@ -1,16 +1,16 @@
 import { Button, Stack, Text } from "@mantine/core";
-import { FormFieldConfiguratorData } from "../types";
+import { FieldConfiguratorData } from "../types";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { EditOption } from "./edit-option";
 import { IconPlus } from "@tabler/icons-react";
 
 type FieldOptionFormProps = {
-  index: number
+  index: number;
 };
 
 export const EditOptionsForm = ({ index }: FieldOptionFormProps) => {
   const path = `formFields.${index}.options` as const;
-  const { control } = useFormContext<FormFieldConfiguratorData>();
+  const { control } = useFormContext<FieldConfiguratorData>();
   const { fields, remove, append } = useFieldArray({
     name: path,
     control

@@ -2,20 +2,20 @@ import { ActionIcon, Button, Group, Text, TextInput } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import { useState } from "react";
 import { useWatch, useForm, useFormContext, FieldPath } from "react-hook-form";
-import { FormFieldConfiguratorData } from "../types";
+import { FieldConfiguratorData } from "../types";
 import { RemoveButton } from "../remove-button";
 
 type EditFieldProps = {
-  path: FieldPath<FormFieldConfiguratorData>;
+  path: FieldPath<FieldConfiguratorData>;
   remove: () => void;
 };
 
 export const EditField = ({ path, remove }: EditFieldProps) => {
   const [editMode, setEditMode] = useState(false);
-  const { setValue } = useFormContext<FormFieldConfiguratorData>();
+  const { setValue } = useFormContext<FieldConfiguratorData>();
   const label = useWatch({ name: path });
   const { register, handleSubmit } = useForm({
-    defaultValues: { name: label },
+    defaultValues: { name: label }
   });
 
   return (
@@ -25,7 +25,7 @@ export const EditField = ({ path, remove }: EditFieldProps) => {
           autoFocus
           placeholder="Required"
           {...register("name", { required: true })}
-          onClick={(event) => event.stopPropagation()}
+          onClick={event => event.stopPropagation()}
         />
       ) : (
         <Text weight="bold" size="lg">
@@ -35,9 +35,9 @@ export const EditField = ({ path, remove }: EditFieldProps) => {
       {editMode ? (
         <Button
           size="xs"
-          onClick={(event) => {
+          onClick={event => {
             event.stopPropagation();
-            handleSubmit((data) => {
+            handleSubmit(data => {
               setEditMode(false);
               setValue(path, data.name);
             })();
@@ -50,7 +50,7 @@ export const EditField = ({ path, remove }: EditFieldProps) => {
           <ActionIcon
             size="md"
             color="indigo.6"
-            onClick={(event) => {
+            onClick={event => {
               event.stopPropagation();
               setEditMode(true);
             }}
@@ -58,7 +58,7 @@ export const EditField = ({ path, remove }: EditFieldProps) => {
             <IconPencil size={16} />
           </ActionIcon>
           <RemoveButton
-            onClick={(event) => {
+            onClick={event => {
               event.stopPropagation();
               remove();
             }}

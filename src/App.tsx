@@ -1,5 +1,5 @@
 import { MantineProvider } from "@mantine/core";
-import { FormFieldsConfigurator } from "./components/form-fields-configurator";
+import { RuleBuilder } from "./components/rule-builder";
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
         }
       }}
     >
-      <FormFieldsConfigurator />
+      <RuleBuilder />
     </MantineProvider>
   );
 }

@@ -13,7 +13,7 @@ export const EditOption = ({
   option,
   index,
   remove,
-  path,
+  path
 }: EditOptionProps) => {
   const { setValue } = useFormContext();
   const { register, handleSubmit } = useForm({ defaultValues: option });
@@ -27,9 +27,9 @@ export const EditOption = ({
       <TextInput
         placeholder="Label"
         {...registerOptionLabel}
-        onBlur={(event) => {
+        onBlur={event => {
           registerOptionLabel.onBlur(event);
-          handleSubmit((data) => {
+          handleSubmit(data => {
             console.log(`${path}.option_label`);
             return setValue(`${path}.option_label`, data.option_label);
           })();
@@ -39,9 +39,9 @@ export const EditOption = ({
       <TextInput
         placeholder="Value"
         {...registerOptionValue}
-        onBlur={(event) => {
+        onBlur={event => {
           registerOptionValue.onBlur(event);
-          handleSubmit((data) =>
+          handleSubmit(data =>
             setValue(`${path}.option_value`, data.option_label)
           )();
         }}

@@ -1,7 +1,7 @@
 import { Button, Container, Grid, Title } from "@mantine/core";
 
 import testFormFields from "../data/test-data.json";
-import { AddFormField } from "./form-field/add-field";
+import { AddFormField } from "./field/add-field";
 import { FormFieldsAccordion } from "./form-fields-accordion";
 import { useForm, useFieldArray, FormProvider } from "react-hook-form";
 

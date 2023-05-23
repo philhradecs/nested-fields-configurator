@@ -5,61 +5,55 @@ import {
   Paper,
   Stack,
   Text,
-  useMantineTheme
+  useMantineTheme,
 } from "@mantine/core";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { FormFieldConfiguratorData } from "../types";
 import { EditRule } from "./edit-rule";
 import { IconPlus } from "@tabler/icons-react";
+import { RemoveButton } from "../remove-button";
 
 type EditRuleChildrenProps = {
-  prefix: string;
+  path: string;
   remove?: () => void;
 };
 
-export const EditRuleChildren = ({
-  prefix,
-  remove: parentRemove
-}: EditRuleChildrenProps) => {
+export const EditRuleChildren = ({ path }: EditRuleChildrenProps) => {
   const { control } = useFormContext<FormFieldConfiguratorData>();
 
   const { fields, append, remove } = useFieldArray({
-    name: `${prefix}.children` as "formFields.0.rules",
-    control
+    name: `${path}.children` as "formFields.0.rules",
+    control,
   });
 
   const theme = useMantineTheme();
 
   return (
     <Box>
-      <Stack mt="md">
+      <Stack>
         {fields.map((child, index) => (
           <Paper
             withBorder
             p="sm"
-            bg={theme.fn.rgba(theme.fn.themeColor("grape"), 0.025)}
+            bg={theme.fn.rgba(theme.fn.themeColor("grape"), 0.03)}
             sx={{ flex: 1 }}
             key={child.id}
           >
-            <Box>
-              <Text mb="sm" weight="bold">
-                and
-              </Text>
-              <EditRule prefix={`${prefix}.children.${index}`} />
+            <Group mb="sm">
+              <Text weight="bold">and</Text>
+              <RemoveButton onClick={() => remove(index)} />
+            </Group>
+            <Stack>
+              <EditRule path={`${path}.children.${index}`} />
               <EditRuleChildren
-                prefix={`${prefix}.children.${index}`}
+                path={`${path}.children.${index}`}
                 remove={() => remove(index)}
               />
-            </Box>
+            </Stack>
           </Paper>
         ))}
       </Stack>
-      <Group position="right" mt="lg">
-        {parentRemove && (
-          <Button variant="light" size="xs" color="pink" onClick={parentRemove}>
-            Remove
-          </Button>
-        )}
+      <Group position="right" mt="sm">
         <Button
           variant="light"
           size="xs"

@@ -1,19 +1,19 @@
-import { ActionIcon, Group, Text, TextInput } from "@mantine/core";
+import { Group, Text, TextInput } from "@mantine/core";
 import { FieldOption } from "../types";
 import { useForm, useFormContext } from "react-hook-form";
-import { IconTrash } from "@tabler/icons-react";
+import { RemoveButton } from "../remove-button";
 
 type EditOptionProps = {
   option: FieldOption;
   index: number;
   remove: () => void;
-  prefix: string;
+  path: string;
 };
 export const EditOption = ({
   option,
   index,
   remove,
-  prefix,
+  path,
 }: EditOptionProps) => {
   const { setValue } = useFormContext();
   const { register, handleSubmit } = useForm({ defaultValues: option });
@@ -30,8 +30,8 @@ export const EditOption = ({
         onBlur={(event) => {
           registerOptionLabel.onBlur(event);
           handleSubmit((data) => {
-            console.log(`${prefix}.option_label`);
-            return setValue(`${prefix}.option_label`, data.option_label);
+            console.log(`${path}.option_label`);
+            return setValue(`${path}.option_label`, data.option_label);
           })();
         }}
         sx={{ flex: 1 }}
@@ -42,14 +42,12 @@ export const EditOption = ({
         onBlur={(event) => {
           registerOptionValue.onBlur(event);
           handleSubmit((data) =>
-            setValue(`${prefix}.option_value`, data.option_label)
+            setValue(`${path}.option_value`, data.option_label)
           )();
         }}
         sx={{ flex: 1 }}
       />
-      <ActionIcon color="pink" onClick={remove}>
-        <IconTrash size={16} />
-      </ActionIcon>
+      <RemoveButton onClick={remove} />
     </Group>
   );
 };

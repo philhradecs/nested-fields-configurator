@@ -10,8 +10,9 @@ export const FieldsForm = ({ index }: ConfigureFormFieldProps) => {
     <Box>
       <Divider mb="lg" opacity={0.7} />
       <EditOptionsForm index={index} />
-      <Divider my="lg" opacity={0.7} />
-      <RulesForm index={index} />
+      <Box mt="xl">
+        <RulesForm index={index} />
+      </Box>
     </Box>
   );
 };

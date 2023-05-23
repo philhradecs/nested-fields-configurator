@@ -1,7 +1,7 @@
 import { Button, Container, Divider, Grid, Title } from "@mantine/core";
 
 import testFormFields from "../data/test-data.json";
-import { AddFormField } from "./form-field/add-field";
+import { AddFormField } from "./field/add-field";
 import { FormFieldsAccordion } from "./form-fields-accordion";
 import { FormFieldConfiguratorData } from "./types";
 import { useForm, useFieldArray, FormProvider } from "react-hook-form";
@@ -13,7 +13,7 @@ export const FormFieldsConfigurator = () => {
   });
   const { handleSubmit, control } = formMethods;
 
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     name: "formFields",
     control
   });
@@ -32,7 +32,7 @@ export const FormFieldsConfigurator = () => {
               <Title order={2} size="h1" mb="lg">
                 Builder
               </Title>
-              <FormFieldsAccordion formFields={fields} />
+              <FormFieldsAccordion formFields={fields} remove={remove} />
             </Grid.Col>
             <Grid.Col sm={4}>
               <Title order={2} size="h1" mb="lg">

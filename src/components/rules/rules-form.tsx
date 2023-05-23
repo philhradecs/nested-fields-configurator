@@ -1,20 +1,26 @@
-import { ActionIcon, Button, Group, Paper, Stack, Text } from "@mantine/core";
-import { FieldRule, FormFieldConfiguratorData } from "../types";
+import { Button, Group, Paper, Stack, Text } from "@mantine/core";
+import { FormFieldConfiguratorData } from "../types";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { EditRuleChildren } from "./edit-rule-children";
 
-import { IconPlus, IconTrash } from "@tabler/icons-react";
+import { IconPlus } from "@tabler/icons-react";
 import { EditRule } from "./edit-rule";
+import { RemoveButton } from "../remove-button";
 
 type FieldOptionFormProps = {
   index: number;
 };
 
 export const RulesForm = ({ index }: FieldOptionFormProps) => {
+  const path = `formFields.${index}.rules` as const;
   const { control } = useFormContext<FormFieldConfiguratorData>();
-  const { fields: rules, remove, append } = useFieldArray({
-    name: `formFields.${index}.rules`,
-    control
+  const {
+    fields: rules,
+    remove,
+    append,
+  } = useFieldArray({
+    name: path,
+    control,
   });
 
   const addRule = () =>
@@ -22,18 +28,18 @@ export const RulesForm = ({ index }: FieldOptionFormProps) => {
 
   return (
     <Stack spacing="lg">
-      <Text weight="bold">Rules</Text>
-      <Stack spacing={32}>
-        {rules.map((rule, ruleIdx) => (
-          <EditNestedRule
-            prefix={`formFields.${index}.rules.${ruleIdx}`}
-            removeRule={() => remove(ruleIdx)}
-            index={ruleIdx}
-            rule={rule}
-            key={rule.id}
-          />
-        ))}
-      </Stack>
+      {rules.length > 0 && (
+        <Stack spacing={32}>
+          {rules.map((rule, ruleIdx) => (
+            <EditNestedRule
+              path={`${path}.${ruleIdx}`}
+              removeRule={() => remove(ruleIdx)}
+              index={ruleIdx}
+              key={rule.id}
+            />
+          ))}
+        </Stack>
+      )}
 
       <Button
         ml="auto"
@@ -48,27 +54,26 @@ export const RulesForm = ({ index }: FieldOptionFormProps) => {
 };
 
 type EditRuleGroupProps = {
-  rule: FieldRule;
-  prefix: string;
+  path: string;
   index: number;
   removeRule: () => void;
 };
 
-const EditNestedRule = ({
-  prefix,
-  index,
-  removeRule
-}: EditRuleGroupProps) => {
+const EditNestedRule = ({ path, index, removeRule }: EditRuleGroupProps) => {
   return (
     <Group>
-      <Text color="dimmed">{index + 1}</Text>
       <Paper withBorder p="md" sx={{ flex: 1 }}>
-        <EditRule prefix={prefix} />
-        <EditRuleChildren prefix={prefix} />
+        <Group mb="md">
+          <Text weight="bold" size="lg">
+            Rule {index + 1}
+          </Text>
+          <RemoveButton onClick={removeRule} />
+        </Group>
+        <Stack>
+          <EditRule path={path} />
+          <EditRuleChildren path={path} />
+        </Stack>
       </Paper>
-      <ActionIcon color="pink" onClick={removeRule}>
-        <IconTrash size={16} />
-      </ActionIcon>
     </Group>
   );
 };

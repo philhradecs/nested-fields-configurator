@@ -5,13 +5,14 @@ import { EditOption } from "./edit-option";
 import { IconPlus } from "@tabler/icons-react";
 
 type FieldOptionFormProps = {
-  index: number;
+  index: number
 };
 
 export const EditOptionsForm = ({ index }: FieldOptionFormProps) => {
+  const path = `formFields.${index}.options` as const;
   const { control } = useFormContext<FormFieldConfiguratorData>();
   const { fields, remove, append } = useFieldArray({
-    name: `formFields.${index}.options`,
+    name: path,
     control
   });
 
@@ -24,7 +25,7 @@ export const EditOptionsForm = ({ index }: FieldOptionFormProps) => {
             option={option}
             index={optionIdx}
             remove={() => remove(index)}
-            prefix={`formFields.${index}.options.${optionIdx}`}
+            path={`${path}.${optionIdx}`}
             key={option.id}
           />
         ))}

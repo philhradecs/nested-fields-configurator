@@ -19,12 +19,12 @@ export const EditOptionsForm = ({ index }: FieldOptionFormProps) => {
     <Stack spacing="lg">
       <Text weight="bold">Options</Text>
       <Stack>
-        {fields.map((option, index) => (
+        {fields.map((option, optionIdx) => (
           <EditOption
             option={option}
-            index={index}
+            index={optionIdx}
             remove={() => remove(index)}
-            prefix={`formFields.${index}.options.${index}`}
+            prefix={`formFields.${index}.options.${optionIdx}`}
             key={option.id}
           />
         ))}

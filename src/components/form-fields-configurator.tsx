@@ -60,7 +60,6 @@ export const FormFieldsConfigurator = () => {
 
 const preventEnterKeySubmission = (e: KeyboardEvent<any>) => {
   const target = e.target as HTMLInputElement | HTMLTextAreaElement;
-  console.log(e.key);
   if (e.key === "Enter" && !["TEXTAREA"].includes(target.tagName)) {
     e.preventDefault();
   }

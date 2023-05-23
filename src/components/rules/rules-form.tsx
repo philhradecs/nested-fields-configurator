@@ -55,7 +55,6 @@ type EditRuleGroupProps = {
 };
 
 const EditNestedRule = ({
-  rule,
   prefix,
   index,
   removeRule
@@ -64,8 +63,8 @@ const EditNestedRule = ({
     <Group>
       <Text color="dimmed">{index + 1}</Text>
       <Paper withBorder p="md" sx={{ flex: 1 }}>
-        <EditRule prefix={prefix} rule={rule} />
-        <EditRuleChildren prefix={prefix} rule={rule} />
+        <EditRule prefix={prefix} />
+        <EditRuleChildren prefix={prefix} />
       </Paper>
       <ActionIcon color="pink" onClick={removeRule}>
         <IconTrash size={16} />

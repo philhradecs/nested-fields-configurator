@@ -8,18 +8,16 @@ import {
   useMantineTheme
 } from "@mantine/core";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { FieldRule, FormFieldConfiguratorData } from "../types";
+import { FormFieldConfiguratorData } from "../types";
 import { EditRule } from "./edit-rule";
 import { IconPlus } from "@tabler/icons-react";
 
 type EditRuleChildrenProps = {
-  rule: FieldRule;
   prefix: string;
   remove?: () => void;
 };
 
 export const EditRuleChildren = ({
-  rule,
   prefix,
   remove: parentRemove
 }: EditRuleChildrenProps) => {
@@ -47,9 +45,8 @@ export const EditRuleChildren = ({
               <Text mb="sm" weight="bold">
                 and
               </Text>
-              <EditRule prefix={`${prefix}.children.${index}`} rule={rule} />
+              <EditRule prefix={`${prefix}.children.${index}`} />
               <EditRuleChildren
-                rule={child as any}
                 prefix={`${prefix}.children.${index}`}
                 remove={() => remove(index)}
               />

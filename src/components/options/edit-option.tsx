@@ -13,30 +13,39 @@ export const EditOption = ({
   option,
   index,
   remove,
-  prefix
+  prefix,
 }: EditOptionProps) => {
   const { setValue } = useFormContext();
   const { register, handleSubmit } = useForm({ defaultValues: option });
+
+  const registerOptionLabel = register("option_label");
+  const registerOptionValue = register("option_value");
+
   return (
     <Group>
       <Text color="dimmed">{index + 1}</Text>
       <TextInput
-        {...register("option_label")}
-        defaultValue={option.option_label}
-        onBlur={handleSubmit(data =>
-          setValue(`${prefix}.option_label`, data.option_label)
-        )}
-        sx={{ flex: 1 }}
         placeholder="Label"
+        {...registerOptionLabel}
+        onBlur={(event) => {
+          registerOptionLabel.onBlur(event);
+          handleSubmit((data) => {
+            console.log(`${prefix}.option_label`);
+            return setValue(`${prefix}.option_label`, data.option_label);
+          })();
+        }}
+        sx={{ flex: 1 }}
       />
       <TextInput
-        {...register("option_value")}
-        defaultValue={option.option_value}
-        onBlur={handleSubmit(data =>
-          setValue(`${prefix}.option_value`, data.option_label)
-        )}
-        sx={{ flex: 1 }}
         placeholder="Value"
+        {...registerOptionValue}
+        onBlur={(event) => {
+          registerOptionValue.onBlur(event);
+          handleSubmit((data) =>
+            setValue(`${prefix}.option_value`, data.option_label)
+          )();
+        }}
+        sx={{ flex: 1 }}
       />
       <ActionIcon color="pink" onClick={remove}>
         <IconTrash size={16} />

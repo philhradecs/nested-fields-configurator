@@ -1,30 +1,59 @@
 import { useFormContext, useWatch } from "react-hook-form";
-import { FormFieldConfiguratorData } from "../types";
-import { useState } from "react";
+import { Field, FormFieldConfiguratorData } from "../types";
+import { useCallback, useEffect, useState } from "react";
 
 type UseFieldsSelectOptionsProps = {
-  watch?: boolean;
+  selectedFieldName: string;
 };
 export const useFieldsSelectOptions = ({
-  watch
+  selectedFieldName,
 }: UseFieldsSelectOptionsProps) => {
-  const { getValues, control } = useFormContext<FormFieldConfiguratorData>();
+  const { getValues } = useFormContext<FormFieldConfiguratorData>();
 
-  const [existingFields, setExistingFields] = useState(getValues("formFields"));
+  const selectedField = useWatch({ name: selectedFieldName });
 
-  const watchedFields = useWatch({
-    control,
-    name: "formFields",
-    disabled: !watch
-  });
+  const getFieldSelectOptions = useCallback(
+    (fields: Field[]) =>
+      fields.map((field) => ({
+        label: field.field_name,
+        value: field.field_key,
+      })),
+    []
+  );
 
-  const effectiveFields = watch ? watchedFields : existingFields;
+  const getFieldOptions = useCallback(
+    (fieldKey: string | undefined) => (fields: Field[]) => {
+      if (!fieldKey) return [];
 
-  const refresh = () => setExistingFields(getValues("formFields"));
+      const field = fields.find((field) => field.field_key === fieldKey);
 
-  const selectOptions = effectiveFields.map(field => ({
-    label: field.field_name,
-    value: field.field_key
-  }));
-  return { selectOptions, refresh };
+      if (!field) return [];
+
+      return field.options.map((option) => ({
+        label: option.option_label,
+        value: option.option_value,
+      }));
+    },
+    []
+  );
+  const [fieldSelectOptions, setFieldSelectOptions] = useState(
+    getFieldSelectOptions(getValues("formFields") || [])
+  );
+  const [selectedFieldOptions, setSelectedFieldOptions] = useState(
+    getFieldOptions(selectedField)(getValues("formFields") || [])
+  );
+
+  const refresh = useCallback(() => {
+    const currentValues = getValues("formFields");
+    setFieldSelectOptions(getFieldSelectOptions(currentValues));
+    setSelectedFieldOptions(
+      getFieldOptions(selectedField)(currentValues) || []
+    );
+  }, [getFieldOptions, getFieldSelectOptions, getValues, selectedField]);
+
+  useEffect(() => {
+    return refresh();
+  }, [refresh, selectedField]);
+
+  return { fieldSelectOptions, selectedFieldOptions, refresh };
 };

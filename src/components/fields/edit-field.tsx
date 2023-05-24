@@ -1,19 +1,22 @@
 import { ActionIcon, Button, Group, Text, TextInput } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import { useState } from "react";
-import { useWatch, useForm, useFormContext, FieldPath } from "react-hook-form";
+import { useWatch, useForm, useFormContext } from "react-hook-form";
 import { RulesBuilderFormData } from "../types";
 import { RemoveButton } from "../remove-button";
 
 type EditFieldProps = {
-  path: FieldPath<RulesBuilderFormData>;
+  index: number;
   remove: () => void;
 };
 
-export const EditField = ({ path, remove }: EditFieldProps) => {
+export const EditField = ({ index, remove }: EditFieldProps) => {
   const [editMode, setEditMode] = useState(false);
-  const { setValue } = useFormContext<RulesBuilderFormData>();
-  const label = useWatch({ name: path });
+  const { setValue, control } = useFormContext<RulesBuilderFormData>();
+
+  const path = `formFields.${index}.field_name` as const;
+
+  const label = useWatch({ name: path, control });
   const { register, handleSubmit } = useForm({
     defaultValues: { name: label }
   });

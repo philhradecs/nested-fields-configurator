@@ -7,10 +7,14 @@ import { RulesBuilderFormData } from "./types";
 
 type SidebarProps = {
   append: UseFieldArrayAppend<RulesBuilderFormData, "formFields">;
-  onSubmit: (data: RulesBuilderFormData) => void;
 };
 
-export const Sidebar = ({ append, onSubmit }: SidebarProps) => {
+export const Sidebar = ({ append }: SidebarProps) => {
+  const onSubmit = (data: RulesBuilderFormData) => {
+    console.log(data);
+    window.alert(JSON.stringify(data, null, 2));
+  };
+
   const { handleSubmit } = useFormContext<RulesBuilderFormData>();
 
   return (
@@ -18,7 +22,7 @@ export const Sidebar = ({ append, onSubmit }: SidebarProps) => {
       defaultValue="library"
       variant="default"
       styles={{
-        panel: { paddingTop: 50 }
+        panel: { paddingTop: 42 }
       }}
     >
       <Tabs.List grow>
@@ -39,14 +43,13 @@ export const Sidebar = ({ append, onSubmit }: SidebarProps) => {
         <AddFormField append={append} />
       </Tabs.Panel>
       <Tabs.Panel value="evaluate">
-        <Title order={3} mb="md">
-          Test Rules
+        <Title order={3}>
+          Evaluate Rules
         </Title>
         <Evaluate />
       </Tabs.Panel>
       <Tabs.Panel value="save">
         <Button
-          mb="xl"
           size="lg"
           fullWidth
           color="green"

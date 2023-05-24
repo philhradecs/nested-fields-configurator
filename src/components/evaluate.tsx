@@ -8,7 +8,7 @@ import {
   Stack,
   Text,
   Title,
-  useMantineTheme
+  useMantineTheme,
 } from "@mantine/core";
 import { Field, RulesBuilderFormData } from "./types";
 import { useFormContext } from "react-hook-form";
@@ -23,15 +23,11 @@ export const Evaluate = () => {
     evaluationFields[0].field_key
   );
 
-  const evaluationRules =
-    evaluationFields.find((field: Field) => field.field_key === selectedField)
-      ?.rules || [];
-
   const defaultJson = JSON.stringify(
     Object.fromEntries(
       evaluationFields.map((field: Field, idx) => [
         field.field_key,
-        `value_${idx + 1}`
+        `option_${idx + 1}`,
       ])
     ),
     null,
@@ -40,51 +36,50 @@ export const Evaluate = () => {
 
   const [fieldDataJson, setFieldDataJson] = useState<string>(defaultJson);
 
-  const validatedFieldData = useMemo<Record<string, any>>(() => {
+  const results = useMemo<boolean[] | null>(() => {
+    const evaluationRules =
+      evaluationFields.find((field: Field) => field.field_key === selectedField)
+        ?.rules || [];
     try {
-      return JSON.parse(fieldDataJson);
+      const parsedData = JSON.parse(fieldDataJson);
+      return evaluateRules(parsedData, evaluationRules);
     } catch (e) {
       return null;
     }
-  }, [fieldDataJson]);
+  }, [evaluationFields, fieldDataJson, selectedField]);
 
-  const results = validatedFieldData
-    ? evaluateRules(validatedFieldData, evaluationRules)
-    : [];
-  const matches = results.filter(Boolean);
+  const hasMatches = results && results.filter(Boolean).length > 0;
 
   const fieldOptions = evaluationFields.map((field: Field) => ({
     value: field.field_key,
-    label: `${field.field_name} Rules`
+    label: `${field.field_name} Rules`,
   }));
 
   const theme = useMantineTheme();
 
   return (
-    <Stack>
+    <Box>
+      <Group position="right">
+        <Button
+          ml="auto"
+          mb='xs'
+          variant="subtle"
+          size="xs"
+          compact
+          onClick={() => setFieldDataJson(defaultJson)}
+        >
+          Get default data
+        </Button>
+      </Group>
       <JsonInput
-        labelProps={{ display: "block" }}
-        label={
-          <Group position="apart" sx={{ flex: 1 }}>
-            <Text>Field Data</Text>
-            <Button
-              variant="subtle"
-              compact
-              size="xs"
-              onClick={() => setFieldDataJson(defaultJson)}
-            >
-              Get default data
-            </Button>
-          </Group>
-        }
-        validationError={!validatedFieldData ? "Invalid JSON" : null}
+
+        validationError={results ? null : "Invalid JSON"}
         styles={{
           input: {
-            background:
-              matches.length > 0
-                ? theme.fn.rgba(theme.fn.themeColor("teal"), 0.25)
-                : theme.fn.rgba(theme.fn.themeColor("pink"), 0.25)
-          }
+            background: hasMatches
+              ? theme.fn.rgba(theme.fn.themeColor("teal"), 0.25)
+              : theme.fn.rgba(theme.fn.themeColor("pink"), 0.25),
+          },
         }}
         size="lg"
         autosize
@@ -92,36 +87,47 @@ export const Evaluate = () => {
         value={fieldDataJson}
         onChange={setFieldDataJson}
       />
-      <Group spacing="lg">
-        <Select
-          label="Rules"
-          size="lg"
-          w="100%"
-          value={selectedField}
-          onChange={setSelectedField}
-          data={fieldOptions}
-          placeholder="Select field"
-        />
-        {validatedFieldData && (
-          <Box>
-            <Title order={3} mt="md" mb="xs">
-              Result
-            </Title>
-            <Group>
-              {results.map((match, idx) => (
-                <Badge
-                  key={idx}
-                  variant="filled"
-                  radius="sm"
-                  size="xl"
-                  color={match ? "teal.9" : "pink.9"}
-                >
-                  Rule {idx + 1}
-                </Badge>
-              ))}
-            </Group>
-          </Box>
-        )}
+      <Select
+        mt="md"
+        size="lg"
+        value={selectedField}
+        onChange={setSelectedField}
+        data={fieldOptions}
+        placeholder="Select field"
+      />
+      {results && (
+        <Box mt={32}>
+          <EvaluationResults results={results} />
+        </Box>
+      )}
+    </Box>
+  );
+};
+
+type EvaluationResultsProps = {
+  results: boolean[];
+};
+const EvaluationResults = ({ results }: EvaluationResultsProps) => {
+  return (
+    <Stack>
+      <Group>
+        <Title order={3}>Matching Rules</Title>
+        <Text weight="normal" size="xl">
+          {results.filter(Boolean).length} / {results.length}
+        </Text>
+      </Group>
+      <Group>
+        {results.map((match, idx) => (
+          <Badge
+            key={idx}
+            variant="filled"
+            radius="sm"
+            size="lg"
+            color={match ? "teal.9" : "pink.9"}
+          >
+            Rule {idx + 1}
+          </Badge>
+        ))}
       </Group>
     </Stack>
   );

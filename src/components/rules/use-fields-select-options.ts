@@ -1,4 +1,4 @@
-import { useFormContext, useWatch } from "react-hook-form";
+import { FieldPath, useFormContext, useWatch } from "react-hook-form";
 import { Field, RulesBuilderFormData } from "../types";
 import { useCallback, useEffect, useState } from "react";
 
@@ -8,9 +8,12 @@ type UseFieldsSelectOptionsProps = {
 export const useFieldsSelectOptions = ({
   selectedFieldName
 }: UseFieldsSelectOptionsProps) => {
-  const { getValues } = useFormContext<RulesBuilderFormData>();
+  const { getValues, control } = useFormContext<RulesBuilderFormData>();
 
-  const selectedField = useWatch({ name: selectedFieldName });
+  const selectedField = useWatch({
+    name: selectedFieldName as FieldPath<RulesBuilderFormData>,
+    control
+  });
 
   const getFieldSelectOptions = useCallback(
     (fields: Field[]) =>
@@ -40,14 +43,18 @@ export const useFieldsSelectOptions = ({
     getFieldSelectOptions(getValues("formFields") || [])
   );
   const [selectedFieldOptions, setSelectedFieldOptions] = useState(() =>
-    getFieldOptions(selectedField)(getValues("formFields") || [])
+    typeof selectedField === "string"
+      ? getFieldOptions(selectedField)(getValues("formFields"))
+      : []
   );
 
   const refresh = useCallback(() => {
     const currentValues = getValues("formFields");
     setFieldSelectOptions(getFieldSelectOptions(currentValues));
     setSelectedFieldOptions(
-      getFieldOptions(selectedField)(currentValues) || []
+      typeof selectedField === "string"
+        ? getFieldOptions(selectedField)(currentValues)
+        : []
     );
   }, [getFieldOptions, getFieldSelectOptions, getValues, selectedField]);
 

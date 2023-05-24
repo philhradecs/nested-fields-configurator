@@ -1,4 +1,4 @@
-import { Container, Grid, Title } from "@mantine/core";
+import { Box, Container, Grid, Title } from "@mantine/core";
 
 import testFormFields from "../data/test-data.json";
 import { FieldsAccordion } from "./fields/fields-accordion";
@@ -16,11 +16,6 @@ export const RuleBuilder = () => {
     control: formMethods.control
   });
 
-  const onSubmit = (data: RulesBuilderFormData) => {
-    console.log(data);
-    window.alert(JSON.stringify(data, null, 2));
-  };
-
   return (
     <Container my={40} size="xl">
       <FormProvider {...formMethods}>
@@ -28,12 +23,14 @@ export const RuleBuilder = () => {
           <Grid gutter={120}>
             <Grid.Col sm={7}>
               <Title order={1} mb="lg">
-                Builder
+                Rule Builder
               </Title>
               <FieldsAccordion formFields={fields} remove={remove} />
             </Grid.Col>
             <Grid.Col sm={5}>
-              <Sidebar append={append} onSubmit={onSubmit} />
+              <Box pos="sticky" top={40}>
+                <Sidebar append={append} />
+              </Box>
             </Grid.Col>
           </Grid>
         </form>

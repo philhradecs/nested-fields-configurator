@@ -2,13 +2,13 @@ import { Group, Select, ActionIcon, Loader } from "@mantine/core";
 import { IconReload } from "@tabler/icons-react";
 import { Controller } from "react-hook-form";
 import { useFieldsSelectOptions } from "./use-fields-select-options";
-import { useTransition } from "react";
+import { memo, useTransition } from "react";
 
 type RuleFieldSelectProps = {
   path: string;
 };
 
-export const EditRule = ({ path }: RuleFieldSelectProps) => {
+export const EditRule = memo(({ path }: RuleFieldSelectProps) => {
   const {
     fieldSelectOptions,
     selectedFieldOptions,
@@ -26,7 +26,7 @@ export const EditRule = ({ path }: RuleFieldSelectProps) => {
             placeholder="Select Field"
             rightSection={
               isPending ? (
-                <Loader size="xs" />
+                <Loader color="blue.4" size={14} />
               ) : (
                 <ActionIcon variant="subtle" onClick={refresh} color="gray">
                   <IconReload size={14} />
@@ -47,7 +47,7 @@ export const EditRule = ({ path }: RuleFieldSelectProps) => {
             placeholder="Select Option"
             rightSection={
               isPending ? (
-                <Loader size="xs" />
+                <Loader color="blue.4" size={14} />
               ) : (
                 <ActionIcon variant="subtle" onClick={refresh} color="gray">
                   <IconReload size={14} />
@@ -63,4 +63,4 @@ export const EditRule = ({ path }: RuleFieldSelectProps) => {
       />
     </Group>
   );
-};
+});

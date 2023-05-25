@@ -1,13 +1,13 @@
 import { ActionIcon, Button, Group, Text, TextInput } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import { useState } from "react";
-import { useWatch, useForm, useFormContext } from "react-hook-form";
+import { useWatch, useForm, useFormContext, UseFieldArrayRemove } from "react-hook-form";
 import { RulesBuilderFormData } from "../types";
 import { RemoveButton } from "../remove-button";
 
 type EditFieldProps = {
   index: number;
-  remove: () => void;
+  remove: UseFieldArrayRemove;
 };
 
 export const EditField = ({ index, remove }: EditFieldProps) => {
@@ -66,7 +66,7 @@ export const EditField = ({ index, remove }: EditFieldProps) => {
             component="div"
             onClick={event => {
               event.stopPropagation();
-              remove();
+              remove(index);
             }}
           />
         </Group>

@@ -24,7 +24,7 @@ export const EditOptionsForm = ({ index }: FieldOptionFormProps) => {
           <EditOption
             option={option}
             index={optionIdx}
-            remove={() => remove(optionIdx)}
+            remove={remove}
             path={`${path}.${optionIdx}`}
             key={option.id}
           />

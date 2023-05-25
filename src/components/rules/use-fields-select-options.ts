@@ -2,24 +2,20 @@ import { FieldPath, useFormContext, useWatch } from "react-hook-form";
 import { Field, RulesBuilderFormData } from "../types";
 import { useCallback, useEffect, useState } from "react";
 
-type UseFieldsSelectOptionsProps = {
-  selectedFieldName: string;
-};
-export const useFieldsSelectOptions = ({
-  selectedFieldName
-}: UseFieldsSelectOptionsProps) => {
+export const useFieldsSelectOptions = (watchSelectedFieldName?: string) => {
   const { getValues, control } = useFormContext<RulesBuilderFormData>();
 
   const selectedField = useWatch({
-    name: selectedFieldName as FieldPath<RulesBuilderFormData>,
-    control
+    name: watchSelectedFieldName as FieldPath<RulesBuilderFormData>,
+    control,
+    disabled: !watchSelectedFieldName,
   });
 
   const getFieldSelectOptions = useCallback(
     (fields: Field[]) =>
-      fields.map(field => ({
+      fields.map((field) => ({
         label: field.field_name,
-        value: field.field_key
+        value: field.field_key,
       })),
     []
   );
@@ -28,18 +24,18 @@ export const useFieldsSelectOptions = ({
     (fieldKey: string | undefined) => (fields: Field[]) => {
       if (!fieldKey) return [];
 
-      const field = fields.find(field => field.field_key === fieldKey);
+      const field = fields.find((field) => field.field_key === fieldKey);
 
       if (!field) return [];
 
-      return field.options.map(option => ({
+      return field.options.map((option) => ({
         label: option.option_label,
-        value: option.option_value
+        value: option.option_value,
       }));
     },
     []
   );
-  const [fieldSelectOptions, setFieldSelectOptions] = useState(() =>
+  const [fieldNames, setFieldSelectOptions] = useState(() =>
     getFieldSelectOptions(getValues("formFields") || [])
   );
   const [selectedFieldOptions, setSelectedFieldOptions] = useState(() =>
@@ -59,8 +55,10 @@ export const useFieldsSelectOptions = ({
   }, [getFieldOptions, getFieldSelectOptions, getValues, selectedField]);
 
   useEffect(() => {
-    return refresh();
-  }, [refresh, selectedField]);
+    if (watchSelectedFieldName) {
+      refresh();
+    }
+  }, [refresh, selectedField, watchSelectedFieldName]);
 
-  return { fieldSelectOptions, selectedFieldOptions, refresh };
+  return { fieldNames, selectedFieldOptions, refresh };
 };

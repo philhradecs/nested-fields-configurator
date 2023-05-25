@@ -22,7 +22,7 @@ export const Sidebar = ({ append }: SidebarProps) => {
       defaultValue="library"
       variant="default"
       styles={{
-        panel: { paddingTop: 42 }
+        panel: { paddingTop: 42 },
       }}
     >
       <Tabs.List grow>
@@ -43,9 +43,7 @@ export const Sidebar = ({ append }: SidebarProps) => {
         <AddFormField append={append} />
       </Tabs.Panel>
       <Tabs.Panel value="evaluate">
-        <Title order={3}>
-          Evaluate Rules
-        </Title>
+        <Title order={3}>Evaluate Rules</Title>
         <Evaluate />
       </Tabs.Panel>
       <Tabs.Panel value="save">
@@ -60,4 +58,4 @@ export const Sidebar = ({ append }: SidebarProps) => {
       </Tabs.Panel>
     </Tabs>
   );
-};
+}

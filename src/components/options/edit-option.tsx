@@ -1,13 +1,13 @@
 import { Group, Text, TextInput } from "@mantine/core";
 import { FieldOption } from "../types";
-import { useForm, useFormContext } from "react-hook-form";
+import { UseFieldArrayRemove, useForm, useFormContext } from "react-hook-form";
 import { RemoveButton } from "../remove-button";
 import { useTransition } from "react";
 
 type EditOptionProps = {
   option: FieldOption;
   index: number;
-  remove: () => void;
+  remove: UseFieldArrayRemove;
   path: string;
 };
 export const EditOption = ({
@@ -56,7 +56,7 @@ export const EditOption = ({
         }}
         sx={{ flex: 1 }}
       />
-      <RemoveButton onClick={remove} />
+      <RemoveButton onClick={() => remove(index)} />
     </Group>
   );
 };

@@ -19,7 +19,7 @@ export const FieldsAccordion = ({
       {formFields.map((field, index) => (
         <Accordion.Item value={field.field_key} key={field.id}>
           <Accordion.Control>
-            <EditField index={index} remove={() => remove(index)} />
+            <EditField index={index} remove={remove} />
           </Accordion.Control>
           <Accordion.Panel>
             <FieldsForm index={index} />
@@ -29,3 +29,4 @@ export const FieldsAccordion = ({
     </Accordion>
   );
 };
+

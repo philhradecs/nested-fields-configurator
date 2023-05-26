@@ -9,17 +9,25 @@ import { createContext, useContext, useEffect } from "react";
 
 type StaticMethods = Pick<
   UseFormReturn<RulesBuilderFormData>,
-  "control" | "getValues" | "register" | "setValue"
+  "control" | "getValues" | "register" | "setValue" | "trigger"
 >;
 
 const StaticMethodsContext = createContext<StaticMethods>({} as StaticMethods);
 export const useStaticMethods = () => useContext(StaticMethodsContext);
 
 export const RuleBuilder = () => {
-  const { control, getValues, register, setValue, watch, handleSubmit } =
-    useForm<RulesBuilderFormData>({
-      defaultValues: { formFields: testFormFields },
-    });
+  const {
+    control,
+    getValues,
+    register,
+    setValue,
+    trigger,
+    watch,
+    handleSubmit,
+  } = useForm<RulesBuilderFormData>({
+    defaultValues: { formFields: testFormFields },
+    mode: "onBlur",
+  });
 
   const { fields, append, remove } = useFieldArray({
     name: "formFields",
@@ -27,13 +35,12 @@ export const RuleBuilder = () => {
   });
 
   const onSubmit = (data: RulesBuilderFormData) => {
-    console.log(data);
-    window.alert(JSON.stringify(data, null, 2));
+    console.log("Success!", data);
   };
 
   useEffect(() => {
     const subscription = watch((_, change) => {
-      console.log(change.type, change.name);
+      change.type && console.log(change.type, change.name);
     });
     return subscription.unsubscribe;
   }, [watch]);
@@ -41,7 +48,7 @@ export const RuleBuilder = () => {
   return (
     <Container my={40} size="xl">
       <StaticMethodsContext.Provider
-        value={{ control, register, getValues, setValue }}
+        value={{ control, register, getValues, setValue, trigger }}
       >
         <form>
           <Grid gutter={120}>
@@ -54,7 +61,12 @@ export const RuleBuilder = () => {
 
             <Grid.Col sm={5}>
               <Box pos="sticky" top={40}>
-                <Sidebar append={append} onSubmit={handleSubmit(onSubmit)} />
+                <Sidebar
+                  append={append}
+                  onSubmit={handleSubmit(onSubmit, (error) =>
+                    console.warn("Errors!", error)
+                  )}
+                />
               </Box>
             </Grid.Col>
           </Grid>

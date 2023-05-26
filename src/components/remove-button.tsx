@@ -6,7 +6,7 @@ import { createPolymorphicComponent } from "@mantine/core";
 
 const _RemoveButton = forwardRef<HTMLButtonElement, ActionIconProps>(
   ({ children, ...others }, ref) => (
-    <ActionIcon color="pink.6" component="button" ref={ref} {...others}>
+    <ActionIcon color="pink.6" component="button" variant='transparent' ref={ref} {...others}>
       <IconTrash stroke={1.5} size={16} />
     </ActionIcon>
   )

@@ -1,14 +1,15 @@
-import { Button, Stack, Text } from "@mantine/core";
+import { Button, Group, Stack, Text } from "@mantine/core";
 import { useFieldArray } from "react-hook-form";
 import { EditOption } from "./edit-option";
 import { IconPlus } from "@tabler/icons-react";
 import { useStaticMethods } from "../rule-builder";
+import { ErrorText } from "../error-text";
 
 type FieldOptionFormProps = {
   fieldIdx: number;
 };
 
-export const EditOptionsForm = ({ fieldIdx }: FieldOptionFormProps) => {
+export const OptionsForm = ({ fieldIdx }: FieldOptionFormProps) => {
   const path = `formFields.${fieldIdx}.options` as const;
   const { control } = useStaticMethods();
   const { fields, remove, append } = useFieldArray({
@@ -18,14 +19,17 @@ export const EditOptionsForm = ({ fieldIdx }: FieldOptionFormProps) => {
 
   return (
     <Stack spacing="lg">
-      <Text weight="bold">Options</Text>
+      <Group>
+        <Text weight="bold">Options</Text>
+        <ErrorText path={`${path}.root`} />
+      </Group>
       <Stack>
         {fields.map((option, optionIdx) => (
           <EditOption
             option={option}
             fieldIdx={fieldIdx}
             optionIdx={optionIdx}
-            remove={remove}
+            remove={fields.length > 1 ? remove : undefined}
             key={option.id}
           />
         ))}

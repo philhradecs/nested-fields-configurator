@@ -14,7 +14,6 @@ export const useFieldsSelectOptions = (
   const selectedField = useWatch({
     name: watchSelectedFieldName,
     control,
-    disabled: !watchSelectedFieldName,
   });
 
   const fieldNames = useMemo(
@@ -43,7 +42,7 @@ export const useFieldsSelectOptions = (
       }));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [getValues, refreshToken, selectedField]
+    [getValues, selectedField, refreshToken]
   );
 
   return { fieldNames, selectedFieldOptions };

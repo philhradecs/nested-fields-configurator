@@ -25,8 +25,8 @@ export const AddFormField = ({ append }: AddFormFieldProps) => {
     append({
       field_name: formFieldName,
       field_key: `field_${values.formFields.length + 1}`,
-      options: [{ option_label: "", option_value: "" }],
-      rules: [{ rule_field_key: "", rule_value: "", children: [] }],
+      options: [],
+      rules: [],
     });
   };
 

@@ -8,20 +8,20 @@ import { useRefreshRuleOptions } from "../refresh";
 
 type EditFieldProps = {
   fieldIdx: number;
-  remove: UseFieldArrayRemove;
+  remove?: UseFieldArrayRemove;
 };
 
 export const EditField = ({ fieldIdx, remove }: EditFieldProps) => {
   const [editMode, setEditMode] = useState(false);
-  const { setValue, control } = useStaticMethods()
+  const { setValue, control } = useStaticMethods();
 
-  const refreshRuleOptions = useRefreshRuleOptions()
+  const refreshRuleOptions = useRefreshRuleOptions();
 
   const path = `formFields.${fieldIdx}.field_name` as const;
 
   const label = useWatch({ name: path, control });
   const { register, handleSubmit } = useForm({
-    defaultValues: { name: label }
+    defaultValues: { name: label },
   });
 
   return (
@@ -31,7 +31,7 @@ export const EditField = ({ fieldIdx, remove }: EditFieldProps) => {
           autoFocus
           placeholder="Required"
           {...register("name", { required: true })}
-          onClick={event => event.stopPropagation()}
+          onClick={(event) => event.stopPropagation()}
         />
       ) : (
         <Text weight="bold" size="lg">
@@ -42,9 +42,9 @@ export const EditField = ({ fieldIdx, remove }: EditFieldProps) => {
         <Button
           component="div"
           size="xs"
-          onClick={event => {
+          onClick={(event) => {
             event.stopPropagation();
-            handleSubmit(data => {
+            handleSubmit((data) => {
               setEditMode(false);
               setValue(path, data.name);
               refreshRuleOptions();
@@ -59,7 +59,7 @@ export const EditField = ({ fieldIdx, remove }: EditFieldProps) => {
             component="div"
             size="md"
             color="indigo.6"
-            onClick={event => {
+            onClick={(event) => {
               event.stopPropagation();
               setEditMode(true);
             }}
@@ -68,10 +68,11 @@ export const EditField = ({ fieldIdx, remove }: EditFieldProps) => {
           </ActionIcon>
           <RemoveButton
             component="div"
-            onClick={event => {
+            disabled={!remove}
+            onClick={(event) => {
               event.stopPropagation();
-              remove(fieldIdx);
-              refreshRuleOptions()
+              remove && remove(fieldIdx);
+              refreshRuleOptions();
             }}
           />
         </Group>

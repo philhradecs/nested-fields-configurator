@@ -1,5 +1,5 @@
 import { Group, Select } from "@mantine/core";
-import { Controller } from "react-hook-form";
+import { Controller, get } from "react-hook-form";
 import { useFieldsSelectOptions } from "./use-fields-select-options";
 import { useStaticMethods } from "../rule-builder";
 
@@ -21,8 +21,13 @@ export const EditRule = ({ path }: RuleFieldSelectProps) => {
       <Controller
         control={control}
         name={`${castedPath}.rule_field_key`}
-        render={({ field }) => (
+        rules={{
+          validate: (value) =>
+            value && fieldNames.some((d) => d.value === value),
+        }}
+        render={({ field, formState: { errors } }) => (
           <Select
+            error={!!get(errors, field.name)}
             placeholder="Select Field"
             data={fieldNames}
             sx={{ flex: 1 }}
@@ -33,8 +38,13 @@ export const EditRule = ({ path }: RuleFieldSelectProps) => {
       <Controller
         control={control}
         name={`${castedPath}.rule_value`}
-        render={({ field }) => (
+        rules={{
+          validate: (value) =>
+            value && selectedFieldOptions.some((d) => d.value === value),
+        }}
+        render={({ field, formState: { errors } }) => (
           <Select
+            error={!!get(errors, field.name)}
             placeholder="Select Option"
             data={selectedFieldOptions}
             sx={{ flex: 1 }}

@@ -14,7 +14,7 @@ export const OptionsForm = ({ fieldIdx }: FieldOptionFormProps) => {
   const { control } = useStaticMethods();
   const { fields, remove, append } = useFieldArray({
     name: path,
-    control,
+    control
   });
 
   return (

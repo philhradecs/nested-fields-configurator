@@ -9,7 +9,7 @@ import {
 import { RemoveButton } from "../remove-button";
 import { useStaticMethods } from "../rule-builder";
 import { useRefreshRuleOptions } from "../refresh";
-import { MouseEvent, useCallback, useEffect } from "react";
+import { useCallback } from "react";
 
 type EditOptionProps = {
   option: FieldOption;
@@ -31,7 +31,7 @@ export const EditOption = ({
   const triggerOptions = useCallback(() => {
     options.forEach((_, idx) => {
       if (idx !== optionIdx) {
-        trigger(`formFields.${fieldIdx}.options.${idx}.option_value`);
+        setTimeout(() => trigger(`formFields.${fieldIdx}.options.${idx}.option_value`), 50);
       }
     });
   }, [fieldIdx, optionIdx, options, trigger]);

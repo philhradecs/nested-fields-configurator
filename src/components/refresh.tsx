@@ -7,6 +7,6 @@ export const useRefreshRuleOptions = () => {
 
   return () => {
     console.warn("refreshing rule options with delay");
-    setTimeout(() => set(Date.now()), 100);
+    setTimeout(() => set(Date.now()), 50);
   };
 };

@@ -7,13 +7,14 @@ import {
   Text,
   Group,
   useMantineTheme,
+  Stack,
 } from "@mantine/core";
 import { UseFieldArrayAppend, useFormState } from "react-hook-form";
 import { Evaluate } from "./evaluate";
 import { AddFormField } from "./fields/add-field";
 import { TabTitle } from "./tab-title";
 import { RulesBuilderFormData } from "./types";
-import { HTMLAttributes } from "react";
+import { HTMLAttributes, useEffect, useState } from "react";
 import { useStaticMethods } from "./rule-builder";
 import { IconCheck, IconExclamationCircle } from "@tabler/icons-react";
 
@@ -62,9 +63,20 @@ export const Sidebar = ({ append, onSubmit }: SidebarProps) => {
 const FormSubmitButton = (
   props: ButtonProps & HTMLAttributes<HTMLButtonElement>
 ) => {
-  const { control } = useStaticMethods();
-  const { isValid, isDirty } = useFormState({ control });
+  const { control, reset } = useStaticMethods();
+  const { isValid, isDirty, isSubmitting, isSubmitSuccessful } = useFormState({
+    control,
+  });
   const theme = useMantineTheme();
+
+  const [lastSubmit, setLastSubmit] = useState<Date>();
+
+  useEffect(() => {
+    if (!isSubmitting && isSubmitSuccessful) {
+      setLastSubmit(new Date());
+      reset((d) => d);
+    }
+  }, [isSubmitSuccessful, isSubmitting, reset]);
 
   return (
     <Box>
@@ -73,22 +85,27 @@ const FormSubmitButton = (
         fullWidth
         color="green"
         disabled={!isDirty || !isValid}
+        loading={isSubmitting}
         {...props}
       >
         Submit
       </Button>
       {!isDirty && (
-        <Group mt='sm' ml='sm' spacing='xs'>
-          <IconCheck size={20} color={theme.colors.green[7]} />
-          <Text color='green.7'>Everything up-to-date</Text></Group>
-        )}
-      {!isValid && (
-        <Group mt='sm' ml='sm' spacing='xs'>
-          <IconExclamationCircle size={20} color={theme.colors.red[7]} />
-          <Text color='red.7'>
-            Some fields have errors.
-          </Text>
-        </Group>
+        <Stack>
+          <Group mt="sm" ml="sm" spacing="xs">
+            <IconCheck size={20} color={theme.colors.green[7]} />
+            <Text color="green.7">Everything up-to-date</Text>
+          </Group>
+          <Box>
+            <Text color="dimmed">
+              Submitted:{" "}
+              {Intl.DateTimeFormat("en", {
+                dateStyle: "short",
+                timeStyle: "medium",
+              }).format(lastSubmit)}
+            </Text>
+          </Box>
+        </Stack>
       )}
     </Box>
   );

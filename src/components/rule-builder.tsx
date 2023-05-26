@@ -9,7 +9,7 @@ import { createContext, useContext, useEffect } from "react";
 
 type StaticMethods = Pick<
   UseFormReturn<RulesBuilderFormData>,
-  "control" | "getValues" | "register" | "setValue" | "trigger"
+  "control" | "getValues" | "register" | "setValue" | "trigger" | 'reset'
 >;
 
 const StaticMethodsContext = createContext<StaticMethods>({} as StaticMethods);
@@ -18,6 +18,7 @@ export const useStaticMethods = () => useContext(StaticMethodsContext);
 export const RuleBuilder = () => {
   const {
     control,
+    reset,
     getValues,
     register,
     setValue,
@@ -48,7 +49,7 @@ export const RuleBuilder = () => {
   return (
     <Container my={40} size="xl">
       <StaticMethodsContext.Provider
-        value={{ control, register, getValues, setValue, trigger }}
+        value={{ control, register, getValues, setValue, trigger, reset }}
       >
         <form>
           <Grid gutter={120}>

@@ -1,19 +1,23 @@
 import { Button, Group, TextInput } from "@mantine/core";
-import { UseFieldArrayAppend, useForm, useFormContext } from "react-hook-form";
+import { UseFieldArrayAppend, useForm } from "react-hook-form";
 import { RulesBuilderFormData } from "../types";
 import { IconPlus } from "@tabler/icons-react";
+import { useStaticMethods } from "../rule-builder";
+import { useRefreshRuleOptions } from "../refresh";
 
 type AddFormFieldProps = {
   append: UseFieldArrayAppend<RulesBuilderFormData, "formFields">;
 };
 export const AddFormField = ({ append }: AddFormFieldProps) => {
-  const { getValues } = useFormContext<RulesBuilderFormData>();
+  const { getValues } = useStaticMethods();
   const { handleSubmit, register, reset } = useForm({
-    defaultValues: { formFieldName: "" }
+    defaultValues: { formFieldName: "" },
   });
 
+  const refreshRuleOptions = useRefreshRuleOptions();
+
   const appendDefaultValues = ({
-    formFieldName
+    formFieldName,
   }: {
     formFieldName: string;
   }) => {
@@ -22,9 +26,16 @@ export const AddFormField = ({ append }: AddFormFieldProps) => {
       field_name: formFieldName,
       field_key: `field_${values.formFields.length + 1}`,
       options: [{ option_label: "", option_value: "" }],
-      rules: [{ rule_field_key: "", rule_value: "", children: [] }]
+      rules: [{ rule_field_key: "", rule_value: "", children: [] }],
     });
-    reset({ formFieldName: "" });
+  };
+
+  const handleSave = () => {
+    handleSubmit((data) => {
+      appendDefaultValues(data);
+      reset({ formFieldName: "" });
+      refreshRuleOptions();
+    })();
   };
 
   return (
@@ -34,11 +45,7 @@ export const AddFormField = ({ append }: AddFormFieldProps) => {
         placeholder="Enter Field Name"
         {...register("formFieldName")}
       />
-      <Button
-        size="lg"
-        onClick={handleSubmit(appendDefaultValues)}
-        leftIcon={<IconPlus size={16} />}
-      >
+      <Button size="lg" onClick={handleSave} leftIcon={<IconPlus size={16} />}>
         Add
       </Button>
     </Group>

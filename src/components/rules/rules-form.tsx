@@ -1,24 +1,23 @@
 import { Button, Group, Paper, Stack, Text } from "@mantine/core";
-import { RulesBuilderFormData } from "../types";
 import {
   UseFieldArrayRemove,
   useFieldArray,
-  useFormContext,
 } from "react-hook-form";
 import { EditRuleChildren } from "./edit-rule-children";
 
 import { IconPlus } from "@tabler/icons-react";
 import { EditRule } from "./edit-rule";
 import { RemoveButton } from "../remove-button";
+import { useStaticMethods } from "../rule-builder";
 
 type FieldOptionFormProps = {
-  index: number;
+  fieldIdx: number;
 };
 
-export const RulesForm = ({ index }: FieldOptionFormProps) => {
-  const { control } = useFormContext<RulesBuilderFormData>();
+export const RulesForm = ({ fieldIdx }: FieldOptionFormProps) => {
+  const { control } = useStaticMethods();
 
-  const path = `formFields.${index}.rules` as const;
+  const path = `formFields.${fieldIdx}.rules` as const;
   const {
     fields: rules,
     remove,
@@ -39,7 +38,7 @@ export const RulesForm = ({ index }: FieldOptionFormProps) => {
             <EditNestedRule
               path={`${path}.${ruleIdx}`}
               remove={remove}
-              index={ruleIdx}
+              ruleIdx={ruleIdx}
               key={rule.id}
             />
           ))}
@@ -60,19 +59,19 @@ export const RulesForm = ({ index }: FieldOptionFormProps) => {
 
 type EditRuleGroupProps = {
   path: string;
-  index: number;
+  ruleIdx: number;
   remove: UseFieldArrayRemove;
 };
 
-const EditNestedRule = ({ path, index, remove }: EditRuleGroupProps) => {
+const EditNestedRule = ({ path, ruleIdx, remove }: EditRuleGroupProps) => {
   return (
     <Group>
       <Paper withBorder p="md" sx={{ flex: 1 }}>
         <Group mb="md">
           <Text weight="bold" size="lg">
-            Rule {index + 1}
+            Rule {ruleIdx + 1}
           </Text>
-          <RemoveButton onClick={() => remove(index)} />
+          <RemoveButton onClick={() => remove(ruleIdx)} />
         </Group>
         <Stack>
           <EditRule path={path} />

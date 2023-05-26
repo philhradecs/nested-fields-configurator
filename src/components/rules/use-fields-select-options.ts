@@ -1,30 +1,39 @@
-import { FieldPath, useFormContext, useWatch } from "react-hook-form";
-import { Field, RulesBuilderFormData } from "../types";
-import { useCallback, useEffect, useState } from "react";
+import { FieldPath, useWatch } from "react-hook-form";
+import { RulesBuilderFormData } from "../types";
+import { useMemo } from "react";
+import { useStaticMethods } from "../rule-builder";
+import { useRefreshToken } from "../refresh";
 
-export const useFieldsSelectOptions = (watchSelectedFieldName?: string) => {
-  const { getValues, control } = useFormContext<RulesBuilderFormData>();
+export const useFieldsSelectOptions = (
+  watchSelectedFieldName: FieldPath<RulesBuilderFormData>
+) => {
+  const { getValues, control } = useStaticMethods();
+
+  const refreshToken = useRefreshToken();
 
   const selectedField = useWatch({
-    name: watchSelectedFieldName as FieldPath<RulesBuilderFormData>,
+    name: watchSelectedFieldName,
     control,
     disabled: !watchSelectedFieldName,
   });
 
-  const getFieldSelectOptions = useCallback(
-    (fields: Field[]) =>
-      fields.map((field) => ({
+  const fieldNames = useMemo(
+    () => {
+      return getValues("formFields").map((field) => ({
         label: field.field_name,
         value: field.field_key,
-      })),
-    []
+      }));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [getValues, refreshToken]
   );
 
-  const getFieldOptions = useCallback(
-    (fieldKey: string | undefined) => (fields: Field[]) => {
-      if (!fieldKey) return [];
-
-      const field = fields.find((field) => field.field_key === fieldKey);
+  const selectedFieldOptions = useMemo(
+    () => {
+      if (!selectedField) return [];
+      const field = getValues("formFields").find(
+        (field) => field.field_key === selectedField
+      );
 
       if (!field) return [];
 
@@ -33,32 +42,9 @@ export const useFieldsSelectOptions = (watchSelectedFieldName?: string) => {
         value: option.option_value,
       }));
     },
-    []
-  );
-  const [fieldNames, setFieldSelectOptions] = useState(() =>
-    getFieldSelectOptions(getValues("formFields") || [])
-  );
-  const [selectedFieldOptions, setSelectedFieldOptions] = useState(() =>
-    typeof selectedField === "string"
-      ? getFieldOptions(selectedField)(getValues("formFields"))
-      : []
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [getValues, refreshToken, selectedField]
   );
 
-  const refresh = useCallback(() => {
-    const currentValues = getValues("formFields");
-    setFieldSelectOptions(getFieldSelectOptions(currentValues));
-    setSelectedFieldOptions(
-      typeof selectedField === "string"
-        ? getFieldOptions(selectedField)(currentValues)
-        : []
-    );
-  }, [getFieldOptions, getFieldSelectOptions, getValues, selectedField]);
-
-  useEffect(() => {
-    if (watchSelectedFieldName) {
-      refresh();
-    }
-  }, [refresh, selectedField, watchSelectedFieldName]);
-
-  return { fieldNames, selectedFieldOptions, refresh };
+  return { fieldNames, selectedFieldOptions };
 };

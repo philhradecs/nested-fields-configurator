@@ -7,21 +7,21 @@ import {
   Text,
   useMantineTheme,
 } from "@mantine/core";
-import {
-  useFieldArray,
-  useFormContext,
-} from "react-hook-form";
-import { RulesBuilderFormData } from "../types";
+import { useFieldArray } from "react-hook-form";
 import { EditRule } from "./edit-rule";
 import { IconPlus } from "@tabler/icons-react";
 import { RemoveButton } from "../remove-button";
+import { useStaticMethods } from "../rule-builder";
+import { useRefreshRuleOptions } from "../refresh";
 
 type EditRuleChildrenProps = {
   path: string;
 };
 
 export const EditRuleChildren = ({ path }: EditRuleChildrenProps) => {
-  const { control } = useFormContext<RulesBuilderFormData>();
+  const { control } = useStaticMethods();
+
+  const refreshRuleOptions = useRefreshRuleOptions();
 
   const { fields, append, remove } = useFieldArray({
     name: `${path}.children` as "formFields.0.rules",
@@ -43,7 +43,12 @@ export const EditRuleChildren = ({ path }: EditRuleChildrenProps) => {
           >
             <Group mb="sm">
               <Text weight="bold">and</Text>
-              <RemoveButton onClick={() => remove(index)} />
+              <RemoveButton
+                onClick={() => {
+                  remove(index);
+                  refreshRuleOptions();
+                }}
+              />
             </Group>
             <Stack>
               <EditRule path={`${path}.children.${index}`} />

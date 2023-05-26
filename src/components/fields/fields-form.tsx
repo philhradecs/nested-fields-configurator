@@ -3,15 +3,15 @@ import { EditOptionsForm } from "../options/options-form";
 import { RulesForm } from "../rules/rules-form";
 
 type ConfigureFormFieldProps = {
-  index: number;
+  fieldIdx: number;
 };
-export const FieldsForm = ({ index }: ConfigureFormFieldProps) => {
+export const FieldsForm = ({ fieldIdx }: ConfigureFormFieldProps) => {
   return (
     <Box>
       <Divider mb="lg" opacity={0.7} />
-      <EditOptionsForm index={index} />
+      <EditOptionsForm fieldIdx={fieldIdx} />
       <Box mt="xl">
-        <RulesForm index={index} />
+        <RulesForm fieldIdx={fieldIdx} />
       </Box>
     </Box>
   );

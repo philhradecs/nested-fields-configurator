@@ -1,5 +1,5 @@
 import { Title, Tabs, Button } from "@mantine/core";
-import { UseFieldArrayAppend, useFormContext } from "react-hook-form";
+import { UseFieldArrayAppend } from "react-hook-form";
 import { Evaluate } from "./evaluate";
 import { AddFormField } from "./fields/add-field";
 import { TabTitle } from "./tab-title";
@@ -7,16 +7,10 @@ import { RulesBuilderFormData } from "./types";
 
 type SidebarProps = {
   append: UseFieldArrayAppend<RulesBuilderFormData, "formFields">;
+  onSubmit: () => void;
 };
 
-export const Sidebar = ({ append }: SidebarProps) => {
-  const onSubmit = (data: RulesBuilderFormData) => {
-    console.log(data);
-    window.alert(JSON.stringify(data, null, 2));
-  };
-
-  const { handleSubmit } = useFormContext<RulesBuilderFormData>();
-
+export const Sidebar = ({ append, onSubmit }: SidebarProps) => {
   return (
     <Tabs
       defaultValue="library"
@@ -47,15 +41,10 @@ export const Sidebar = ({ append }: SidebarProps) => {
         <Evaluate />
       </Tabs.Panel>
       <Tabs.Panel value="save">
-        <Button
-          size="lg"
-          fullWidth
-          color="green"
-          onClick={handleSubmit(onSubmit)}
-        >
+        <Button size="lg" fullWidth color="green" onClick={onSubmit}>
           Submit
         </Button>
       </Tabs.Panel>
     </Tabs>
   );
-}
+};

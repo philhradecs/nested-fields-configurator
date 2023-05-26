@@ -1,62 +1,60 @@
 import { Group, Text, TextInput } from "@mantine/core";
 import { FieldOption } from "../types";
-import { UseFieldArrayRemove, useForm, useFormContext } from "react-hook-form";
+import { UseFieldArrayRemove } from "react-hook-form";
 import { RemoveButton } from "../remove-button";
-import { useTransition } from "react";
+import { useStaticMethods } from "../rule-builder";
+import { useRefreshRuleOptions } from "../refresh";
 
 type EditOptionProps = {
   option: FieldOption;
-  index: number;
+  fieldIdx: number;
+  optionIdx: number;
   remove: UseFieldArrayRemove;
-  path: string;
 };
 export const EditOption = ({
-  option,
-  index,
+  fieldIdx,
+  optionIdx,
   remove,
-  path
 }: EditOptionProps) => {
-  const { setValue } = useFormContext();
-  const { register, handleSubmit } = useForm({
-    defaultValues: option
-  });
+  const { register } = useStaticMethods();
 
-  const startTransition = useTransition()[1];
+  const refreshRuleOptions = useRefreshRuleOptions();
 
-  const registerOptionLabel = register("option_label");
-  const registerOptionValue = register("option_value");
+  const registerOptionLabel = register(
+    `formFields.${fieldIdx}.options.${optionIdx}.option_label`
+  );
+  const registerOptionValue = register(
+    `formFields.${fieldIdx}.options.${optionIdx}.option_value`
+  );
 
   return (
     <Group>
-      <Text color="dimmed">{index + 1}</Text>
+      <Text color="dimmed">{optionIdx + 1}</Text>
       <TextInput
         autoFocus
         placeholder="Label"
         {...registerOptionLabel}
-        onBlur={event => {
+        onBlur={(event) => {
+          refreshRuleOptions();
           registerOptionLabel.onBlur(event);
-          handleSubmit(data => {
-            startTransition(() =>
-              setValue(`${path}.option_label`, data.option_label)
-            );
-          })();
         }}
         sx={{ flex: 1 }}
       />
       <TextInput
         placeholder="Value"
         {...registerOptionValue}
-        onBlur={event => {
-          registerOptionValue.onBlur(event);
-          handleSubmit(data =>
-            startTransition(() =>
-              setValue(`${path}.option_value`, data.option_label)
-            )
-          )();
+        onBlur={(event) => {
+          refreshRuleOptions();
+          registerOptionLabel.onBlur(event);
         }}
         sx={{ flex: 1 }}
       />
-      <RemoveButton onClick={() => remove(index)} />
+      <RemoveButton
+        onClick={() => {
+          remove(optionIdx);
+          refreshRuleOptions();
+        }}
+      />
     </Group>
   );
 };

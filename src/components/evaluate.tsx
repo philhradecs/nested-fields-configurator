@@ -10,14 +10,15 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { Field, RulesBuilderFormData } from "./types";
-import { useFormContext } from "react-hook-form";
+import { Field } from "./types";
 import { useMemo, useState } from "react";
 import { evaluateRules } from "../util/evaluate-rules";
+import { useStaticMethods } from "./rule-builder";
+import { useWatch } from "react-hook-form";
 
 export const Evaluate = () => {
-  const { watch } = useFormContext<RulesBuilderFormData>();
-  const evaluationFields = watch("formFields");
+  const { control } = useStaticMethods();
+  const evaluationFields = useWatch({ name: "formFields", control });
 
   const [selectedField, setSelectedField] = useState<string | null>(
     evaluationFields[0].field_key
@@ -62,7 +63,7 @@ export const Evaluate = () => {
       <Group position="right">
         <Button
           ml="auto"
-          mb='xs'
+          mb="xs"
           variant="subtle"
           size="xs"
           compact
@@ -72,7 +73,6 @@ export const Evaluate = () => {
         </Button>
       </Group>
       <JsonInput
-
         validationError={results ? null : "Invalid JSON"}
         styles={{
           input: {

@@ -1,20 +1,23 @@
 import { ActionIcon, Button, Group, Text, TextInput } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import { useState } from "react";
-import { useWatch, useForm, useFormContext, UseFieldArrayRemove } from "react-hook-form";
-import { RulesBuilderFormData } from "../types";
+import { useWatch, useForm, UseFieldArrayRemove } from "react-hook-form";
 import { RemoveButton } from "../remove-button";
+import { useStaticMethods } from "../rule-builder";
+import { useRefreshRuleOptions } from "../refresh";
 
 type EditFieldProps = {
-  index: number;
+  fieldIdx: number;
   remove: UseFieldArrayRemove;
 };
 
-export const EditField = ({ index, remove }: EditFieldProps) => {
+export const EditField = ({ fieldIdx, remove }: EditFieldProps) => {
   const [editMode, setEditMode] = useState(false);
-  const { setValue, control } = useFormContext<RulesBuilderFormData>();
+  const { setValue, control } = useStaticMethods()
 
-  const path = `formFields.${index}.field_name` as const;
+  const refreshRuleOptions = useRefreshRuleOptions()
+
+  const path = `formFields.${fieldIdx}.field_name` as const;
 
   const label = useWatch({ name: path, control });
   const { register, handleSubmit } = useForm({
@@ -44,6 +47,7 @@ export const EditField = ({ index, remove }: EditFieldProps) => {
             handleSubmit(data => {
               setEditMode(false);
               setValue(path, data.name);
+              refreshRuleOptions();
             })();
           }}
         >
@@ -66,7 +70,8 @@ export const EditField = ({ index, remove }: EditFieldProps) => {
             component="div"
             onClick={event => {
               event.stopPropagation();
-              remove(index);
+              remove(fieldIdx);
+              refreshRuleOptions()
             }}
           />
         </Group>

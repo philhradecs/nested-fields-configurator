@@ -3,22 +3,46 @@ import { Box, Container, Grid, Title } from "@mantine/core";
 import testFormFields from "../data/test-data.json";
 import { FieldsAccordion } from "./fields/fields-accordion";
 import { RulesBuilderFormData } from "./types";
-import { useForm, useFieldArray, FormProvider } from "react-hook-form";
+import { useForm, useFieldArray, UseFormReturn } from "react-hook-form";
 import { Sidebar } from "./sidebar";
+import { createContext, useContext, useEffect } from "react";
+
+type StaticMethods = Pick<
+  UseFormReturn<RulesBuilderFormData>,
+  "control" | "getValues" | "register" | "setValue"
+>;
+
+const StaticMethodsContext = createContext<StaticMethods>({} as StaticMethods);
+export const useStaticMethods = () => useContext(StaticMethodsContext);
 
 export const RuleBuilder = () => {
-  const formMethods = useForm<RulesBuilderFormData>({
-    defaultValues: { formFields: testFormFields }
-  });
+  const { control, getValues, register, setValue, watch, handleSubmit } =
+    useForm<RulesBuilderFormData>({
+      defaultValues: { formFields: testFormFields },
+    });
 
   const { fields, append, remove } = useFieldArray({
     name: "formFields",
-    control: formMethods.control
+    control,
   });
+
+  const onSubmit = (data: RulesBuilderFormData) => {
+    console.log(data);
+    window.alert(JSON.stringify(data, null, 2));
+  };
+
+  useEffect(() => {
+    const subscription = watch((_, change) => {
+      console.log(change.type, change.name);
+    });
+    return subscription.unsubscribe;
+  }, [watch]);
 
   return (
     <Container my={40} size="xl">
-      <FormProvider {...formMethods}>
+      <StaticMethodsContext.Provider
+        value={{ control, register, getValues, setValue }}
+      >
         <form>
           <Grid gutter={120}>
             <Grid.Col sm={7}>
@@ -27,14 +51,15 @@ export const RuleBuilder = () => {
               </Title>
               <FieldsAccordion formFields={fields} remove={remove} />
             </Grid.Col>
+
             <Grid.Col sm={5}>
               <Box pos="sticky" top={40}>
-                <Sidebar append={append} />
+                <Sidebar append={append} onSubmit={handleSubmit(onSubmit)} />
               </Box>
             </Grid.Col>
           </Grid>
         </form>
-      </FormProvider>
+      </StaticMethodsContext.Provider>
     </Container>
   );
 };

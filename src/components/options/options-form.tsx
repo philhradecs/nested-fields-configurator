@@ -3,7 +3,6 @@ import { useFieldArray } from "react-hook-form";
 import { EditOption } from "./edit-option";
 import { IconPlus } from "@tabler/icons-react";
 import { useStaticMethods } from "../rule-builder";
-import { ErrorText } from "../error-text";
 
 type FieldOptionFormProps = {
   fieldIdx: number;
@@ -21,7 +20,6 @@ export const OptionsForm = ({ fieldIdx }: FieldOptionFormProps) => {
     <Stack spacing="lg">
       <Group>
         <Text weight="bold">Options</Text>
-        <ErrorText path={`${path}.root`} />
       </Group>
       <Stack>
         {fields.map((option, optionIdx) => (

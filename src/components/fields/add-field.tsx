@@ -5,10 +5,10 @@ import { IconPlus } from "@tabler/icons-react";
 import { useStaticMethods } from "../rule-builder";
 import { useRefreshRuleOptions } from "../refresh";
 
-type AddFormFieldProps = {
+type AddFieldProps = {
   append: UseFieldArrayAppend<RulesBuilderFormData, "formFields">;
 };
-export const AddFormField = ({ append }: AddFormFieldProps) => {
+export const AddField = ({ append }: AddFieldProps) => {
   const { getValues } = useStaticMethods();
   const { handleSubmit, register, reset } = useForm({
     defaultValues: { formFieldName: "" },

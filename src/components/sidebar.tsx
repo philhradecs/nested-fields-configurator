@@ -1,22 +1,10 @@
-import {
-  Title,
-  Tabs,
-  Button,
-  ButtonProps,
-  Box,
-  Text,
-  Group,
-  useMantineTheme,
-  Stack,
-} from "@mantine/core";
-import { UseFieldArrayAppend, useFormState } from "react-hook-form";
+import { Title, Tabs } from "@mantine/core";
+import { UseFieldArrayAppend } from "react-hook-form";
 import { Evaluate } from "./evaluate";
-import { AddFormField } from "./fields/add-field";
+import { AddField } from "./fields/add-field";
 import { TabTitle } from "./tab-title";
 import { RulesBuilderFormData } from "./types";
-import { HTMLAttributes } from "react";
-import { useStaticMethods } from "./rule-builder";
-import { IconCheck } from "@tabler/icons-react";
+import { FormSubmitButton } from "./form-submit-button";
 
 type SidebarProps = {
   append: UseFieldArrayAppend<RulesBuilderFormData, "formFields">;
@@ -47,7 +35,7 @@ export const Sidebar = ({ append, onSubmit }: SidebarProps) => {
         <Title order={3} mb="md">
           Add Field
         </Title>
-        <AddFormField append={append} />
+        <AddField append={append} />
       </Tabs.Panel>
       <Tabs.Panel value="evaluate">
         <Title order={3}>Evaluate Rules</Title>
@@ -57,38 +45,5 @@ export const Sidebar = ({ append, onSubmit }: SidebarProps) => {
         <FormSubmitButton onClick={onSubmit} />
       </Tabs.Panel>
     </Tabs>
-  );
-};
-
-const FormSubmitButton = (
-  props: ButtonProps & HTMLAttributes<HTMLButtonElement>
-) => {
-  const { control } = useStaticMethods();
-  const { isValid, isDirty, isSubmitting } = useFormState({
-    control,
-  });
-  const theme = useMantineTheme();
-
-  return (
-    <Box>
-      <Button
-        size="lg"
-        fullWidth
-        color="green"
-        disabled={!isDirty || !isValid}
-        loading={isSubmitting}
-        {...props}
-      >
-        Submit
-      </Button>
-      {!isDirty && (
-        <Stack>
-          <Group mt="sm" ml="sm" spacing="xs">
-            <IconCheck size={20} color={theme.colors.green[7]} />
-            <Text color="green.7">Everything up-to-date</Text>
-          </Group>
-        </Stack>
-      )}
-    </Box>
   );
 };

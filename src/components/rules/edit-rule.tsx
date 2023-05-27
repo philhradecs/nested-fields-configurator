@@ -1,57 +1,30 @@
-import { Group, Select } from "@mantine/core";
-import { Controller, get } from "react-hook-form";
-import { useFieldsSelectOptions } from "./use-fields-select-options";
-import { useStaticMethods } from "../rule-builder";
+import { Group, Paper, Stack, Text } from "@mantine/core";
+import { UseFieldArrayRemove } from "react-hook-form";
+import { RemoveButton } from "../remove-button";
+import { EditRuleChildren } from "./edit-rule-children";
+import { EditRuleMain } from "./edit-rule-main";
 
-type RuleFieldSelectProps = {
+type EditRuleGroupProps = {
   path: string;
+  ruleIdx: number;
+  remove: UseFieldArrayRemove;
 };
 
-export const EditRule = ({ path }: RuleFieldSelectProps) => {
-  const { control } = useStaticMethods();
-
-  const castedPath = path as `formFields.${number}.rules.${number}`;
-
-  const { fieldNames, selectedFieldOptions } = useFieldsSelectOptions(
-    `${castedPath}.rule_field_key`
-  );
-
+export const EditRule = ({ path, ruleIdx, remove }: EditRuleGroupProps) => {
   return (
     <Group>
-      <Controller
-        control={control}
-        name={`${castedPath}.rule_field_key`}
-        rules={{
-          validate: (value) =>
-            value && fieldNames.some((d) => d.value === value),
-        }}
-        render={({ field, formState: { errors } }) => (
-          <Select
-            error={!!get(errors, field.name)}
-            placeholder="Select Field"
-            data={fieldNames}
-            sx={{ flex: 1 }}
-            {...field}
-          />
-        )}
-      />
-      <Controller
-        control={control}
-        name={`${castedPath}.rule_value`}
-        rules={{
-          validate: (value) =>
-            value && selectedFieldOptions.some((d) => d.value === value),
-        }}
-        render={({ field, formState: { errors } }) => (
-          <Select
-            error={!!get(errors, field.name)}
-            placeholder="Select Option"
-            data={selectedFieldOptions}
-            sx={{ flex: 1 }}
-            {...field}
-          />
-        )}
-      />
+      <Paper withBorder p="md" sx={{ flex: 1 }}>
+        <Group mb="md">
+          <Text weight="bold" size="lg">
+            Rule {ruleIdx + 1}
+          </Text>
+          <RemoveButton onClick={() => remove(ruleIdx)} />
+        </Group>
+        <Stack>
+          <EditRuleMain path={path} />
+          <EditRuleChildren path={path} />
+        </Stack>
+      </Paper>
     </Group>
   );
 };

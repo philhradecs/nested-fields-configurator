@@ -23,6 +23,7 @@ export const useFieldsSelectOptions = (
         value: field.field_key,
       }));
     },
+    // update when refresh token changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [getValues, refreshToken]
   );
@@ -41,6 +42,7 @@ export const useFieldsSelectOptions = (
         value: option.option_value,
       }));
     },
+    // update when refresh token changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [getValues, selectedField, refreshToken]
   );

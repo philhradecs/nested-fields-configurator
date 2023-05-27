@@ -1,14 +1,9 @@
-import { Button, Group, Paper, Stack, Text } from "@mantine/core";
-import {
-  UseFieldArrayRemove,
-  useFieldArray,
-} from "react-hook-form";
-import { EditRuleChildren } from "./edit-rule-children";
+import { Button, Stack } from "@mantine/core";
+import { useFieldArray } from "react-hook-form";
 
 import { IconPlus } from "@tabler/icons-react";
-import { EditRule } from "./edit-rule";
-import { RemoveButton } from "../remove-button";
 import { useStaticMethods } from "../rule-builder";
+import { EditRule } from "./edit-rule";
 
 type FieldOptionFormProps = {
   fieldIdx: number;
@@ -35,7 +30,7 @@ export const RulesForm = ({ fieldIdx }: FieldOptionFormProps) => {
       {rules.length > 0 && (
         <Stack spacing={32}>
           {rules.map((rule, ruleIdx) => (
-            <EditNestedRule
+            <EditRule
               path={`${path}.${ruleIdx}`}
               remove={remove}
               ruleIdx={ruleIdx}
@@ -54,30 +49,5 @@ export const RulesForm = ({ fieldIdx }: FieldOptionFormProps) => {
         Add Rule
       </Button>
     </Stack>
-  );
-};
-
-type EditRuleGroupProps = {
-  path: string;
-  ruleIdx: number;
-  remove: UseFieldArrayRemove;
-};
-
-const EditNestedRule = ({ path, ruleIdx, remove }: EditRuleGroupProps) => {
-  return (
-    <Group>
-      <Paper withBorder p="md" sx={{ flex: 1 }}>
-        <Group mb="md">
-          <Text weight="bold" size="lg">
-            Rule {ruleIdx + 1}
-          </Text>
-          <RemoveButton onClick={() => remove(ruleIdx)} />
-        </Group>
-        <Stack>
-          <EditRule path={path} />
-          <EditRuleChildren path={path} />
-        </Stack>
-      </Paper>
-    </Group>
   );
 };

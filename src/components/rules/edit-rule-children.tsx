@@ -8,7 +8,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useFieldArray } from "react-hook-form";
-import { EditRule } from "./edit-rule";
+import { EditRuleMain } from "./edit-rule-main";
 import { IconPlus } from "@tabler/icons-react";
 import { RemoveButton } from "../remove-button";
 import { useStaticMethods } from "../rule-builder";
@@ -51,7 +51,7 @@ export const EditRuleChildren = ({ path }: EditRuleChildrenProps) => {
               />
             </Group>
             <Stack>
-              <EditRule path={`${path}.children.${index}`} />
+              <EditRuleMain path={`${path}.children.${index}`} />
               <EditRuleChildren path={`${path}.children.${index}`} />
             </Stack>
           </Paper>

@@ -1,6 +1,6 @@
 import { ActionIcon, Button, Group, Text, TextInput } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useWatch, useForm, UseFieldArrayRemove } from "react-hook-form";
 import { RemoveButton } from "../remove-button";
 import { useStaticMethods } from "../rule-builder";
@@ -11,7 +11,7 @@ type EditFieldProps = {
   remove?: UseFieldArrayRemove;
 };
 
-export const EditField = ({ fieldIdx, remove }: EditFieldProps) => {
+export const EditField = memo(({ fieldIdx, remove }: EditFieldProps) => {
   const [editMode, setEditMode] = useState(false);
   const { setValue, control } = useStaticMethods();
 
@@ -79,4 +79,4 @@ export const EditField = ({ fieldIdx, remove }: EditFieldProps) => {
       )}
     </Group>
   );
-};
+})

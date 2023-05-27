@@ -3,11 +3,7 @@ import { FieldForm } from "./field-form";
 
 import { EditField } from "./edit-field";
 import { Field } from "../types";
-import {
-  UseFieldArrayRemove,
-  get,
-  useFormState,
-} from "react-hook-form";
+import { UseFieldArrayRemove, get, useFormState } from "react-hook-form";
 import { useStaticMethods } from "../rule-builder";
 import { IconExclamationCircle } from "@tabler/icons-react";
 
@@ -20,8 +16,18 @@ export const FieldsAccordion = ({
   formFields,
   remove,
 }: FieldsAccordionProps) => {
+  const { trigger } = useStaticMethods();
+
   return (
-    <Accordion variant="separated">
+    <Accordion
+      variant="separated"
+      onChange={(val) => {
+        // trigger form validation on accordion collapse to show error indicators
+        if (val === null) {
+          setTimeout(trigger, 200)
+        }
+      }}
+    >
       {formFields.map((field, index) => (
         <Accordion.Item value={field.field_key} key={field.id}>
           <AccordionControlWithErrors

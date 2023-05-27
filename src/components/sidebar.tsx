@@ -14,9 +14,9 @@ import { Evaluate } from "./evaluate";
 import { AddFormField } from "./fields/add-field";
 import { TabTitle } from "./tab-title";
 import { RulesBuilderFormData } from "./types";
-import { HTMLAttributes, useEffect, useState } from "react";
+import { HTMLAttributes } from "react";
 import { useStaticMethods } from "./rule-builder";
-import { IconCheck, IconExclamationCircle } from "@tabler/icons-react";
+import { IconCheck } from "@tabler/icons-react";
 
 type SidebarProps = {
   append: UseFieldArrayAppend<RulesBuilderFormData, "formFields">;
@@ -63,20 +63,11 @@ export const Sidebar = ({ append, onSubmit }: SidebarProps) => {
 const FormSubmitButton = (
   props: ButtonProps & HTMLAttributes<HTMLButtonElement>
 ) => {
-  const { control, reset } = useStaticMethods();
-  const { isValid, isDirty, isSubmitting, isSubmitSuccessful } = useFormState({
+  const { control } = useStaticMethods();
+  const { isValid, isDirty, isSubmitting } = useFormState({
     control,
   });
   const theme = useMantineTheme();
-
-  const [lastSubmit, setLastSubmit] = useState<Date>();
-
-  useEffect(() => {
-    if (!isSubmitting && isSubmitSuccessful) {
-      setLastSubmit(new Date());
-      reset((d) => d);
-    }
-  }, [isSubmitSuccessful, isSubmitting, reset]);
 
   return (
     <Box>
@@ -96,15 +87,6 @@ const FormSubmitButton = (
             <IconCheck size={20} color={theme.colors.green[7]} />
             <Text color="green.7">Everything up-to-date</Text>
           </Group>
-          <Box>
-            <Text color="dimmed">
-              Submitted:{" "}
-              {Intl.DateTimeFormat("en", {
-                dateStyle: "short",
-                timeStyle: "medium",
-              }).format(lastSubmit)}
-            </Text>
-          </Box>
         </Stack>
       )}
     </Box>

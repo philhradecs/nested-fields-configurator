@@ -28,13 +28,17 @@ export const EditOption = ({
 
   const options = useWatch({ control, name: `formFields.${fieldIdx}.options` });
 
-  const triggerOptions = useCallback(() => {
-    options.forEach((_, idx) => {
-      if (idx !== optionIdx) {
-        setTimeout(() => trigger(`formFields.${fieldIdx}.options.${idx}.option_value`), 50);
-      }
-    });
-  }, [fieldIdx, optionIdx, options, trigger]);
+  const triggerOptions = useCallback(
+    (options: FieldOption[]) =>
+      setTimeout(() =>
+        options.forEach((_, idx) => {
+          if (idx !== optionIdx) {
+            trigger(`formFields.${fieldIdx}.options.${idx}.option_value`);
+          }
+        }),
+      100),
+    [fieldIdx, optionIdx, trigger]
+  );
 
   const registerOptionLabel = register(
     `formFields.${fieldIdx}.options.${optionIdx}.option_label`,
@@ -54,7 +58,7 @@ export const EditOption = ({
         if (!!event.target.value) {
           refreshRuleOptions();
         }
-        triggerOptions();
+        triggerOptions(options);
       },
       required: true,
       validate: (value) => {

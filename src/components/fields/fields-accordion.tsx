@@ -1,4 +1,4 @@
-import { Accordion, Group, Text, useMantineTheme } from "@mantine/core";
+import { Accordion, useMantineTheme } from "@mantine/core";
 import { FieldForm } from "./field-form";
 
 import { EditField } from "./edit-field";
@@ -7,7 +7,6 @@ import {
   UseFieldArrayRemove,
   get,
   useFormState,
-  useWatch,
 } from "react-hook-form";
 import { useStaticMethods } from "../rule-builder";
 import { IconExclamationCircle } from "@tabler/icons-react";

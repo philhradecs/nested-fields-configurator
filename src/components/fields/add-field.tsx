@@ -43,7 +43,7 @@ export const AddFormField = ({ append }: AddFormFieldProps) => {
       <TextInput
         size="lg"
         placeholder="Enter Field Name"
-        {...register("formFieldName")}
+        {...register("formFieldName", { required: true })}
       />
       <Button size="lg" onClick={handleSave} leftIcon={<IconPlus size={16} />}>
         Add
